@@ -74,6 +74,14 @@ nav .logo {
     margin-bottom: 20px;
 }
 
+.cta-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    margin-top: 20px;
+}
+
 .cta-button {
     background: #ff6b6b;
     color: white;
@@ -83,11 +91,17 @@ nav .logo {
     font-size: 1.2em;
     font-weight: 600;
     transition: 0.3s ease-in-out;
+    display: inline-block;
+    width: 250px;
+    text-align: center;
+}
+
+.subscribe {
+    background: #4CAF50; /* Green for subscribe button */
 }
 
 .cta-button:hover {
-    background: #ff4f4f;
-    transform: scale(1.05);
+    opacity: 0.8;
 }
 
 .features {
