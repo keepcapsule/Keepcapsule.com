@@ -1,5 +1,6 @@
+/* Global Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
     text-align: center;
     background-color: #f8f8f8;
     color: #333;
@@ -7,34 +8,109 @@ body {
     padding: 0;
 }
 
+/* Navigation Bar */
 header {
     background: #2d89ef;
     color: white;
-    padding: 20px;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-h1 {
-    font-size: 2.5em;
+nav .logo {
+    font-size: 1.8em;
+    font-weight: 600;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
     margin: 0;
+    display: flex;
 }
 
-.hero {
-    padding: 50px 20px;
+.nav-links li {
+    margin: 0 15px;
 }
 
-.cta-button {
-    background: #2d89ef;
-    color: white;
+.nav-links a {
     text-decoration: none;
-    padding: 15px 25px;
-    border-radius: 5px;
-    display: inline-block;
+    color: white;
+    font-weight: 500;
     font-size: 1.2em;
 }
 
+/* Hero Section */
+.hero {
+    background: linear-gradient(to right, #2d89ef, #005cbf);
+    color: white;
+    padding: 100px 20px;
+}
+
+.hero h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    font-size: 1.4em;
+    margin-bottom: 20px;
+}
+
+.cta-button {
+    background: white;
+    color: #2d89ef;
+    text-decoration: none;
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-size: 1.2em;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.cta-button:hover {
+    background: #f0f0f0;
+}
+
+/* Features Section */
+.features {
+    padding: 80px 20px;
+    background: #fff;
+}
+
+.feature-cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.feature-card {
+    background: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    text-align: center;
+}
+
+.feature-card h3 {
+    font-size: 1.5em;
+    color: #2d89ef;
+}
+
+/* Join Section */
+.join {
+    background: #2d89ef;
+    color: white;
+    padding: 80px 20px;
+}
+
+/* Footer */
 footer {
     background: #222;
     color: white;
-    padding: 10px;
+    padding: 20px;
     margin-top: 50px;
 }
