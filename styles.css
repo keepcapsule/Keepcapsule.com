@@ -13,13 +13,23 @@ header {
     color: white;
     padding: 15px 20px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 nav .logo {
     font-size: 1.8em;
     font-weight: 600;
+    margin-bottom: 10px;
 }
 
 .nav-links {
@@ -27,10 +37,12 @@ nav .logo {
     padding: 0;
     margin: 0;
     display: flex;
+    justify-content: center;
+    gap: 20px;
 }
 
 .nav-links li {
-    margin: 0 15px;
+    display: inline;
 }
 
 .nav-links a {
@@ -39,7 +51,6 @@ nav .logo {
     font-weight: 500;
     font-size: 1.2em;
 }
-
 .hero {
     background: url('old_photo.jpg') center/cover no-repeat;
     height: 500px;
