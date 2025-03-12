@@ -41,7 +41,7 @@ nav .logo {
 }
 
 .hero {
-    background: url('old_photo.jpg') center/cover no-repeat;
+    background: url('old_photo.jpeg') center/cover no-repeat;
     height: 500px;
     display: flex;
     justify-content: center;
