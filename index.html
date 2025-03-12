@@ -7,6 +7,7 @@
     <meta name="description" content="Never lose a memory. Keep them safe forever with KeepCapsule.">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/YOUR-KIT-ID.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <header>
@@ -37,14 +38,17 @@
         <h2>Why Choose KeepCapsule?</h2>
         <div class="feature-cards">
             <div class="feature-card">
+                <i class="fas fa-lock"></i>
                 <h3>Secure Storage</h3>
                 <p>We use top-tier encryption and cloud technology to keep your memories safe.</p>
             </div>
             <div class="feature-card">
+                <i class="fas fa-infinity"></i>
                 <h3>Forever Access</h3>
                 <p>Your memories are stored permanently, retrievable anytime.</p>
             </div>
             <div class="feature-card">
+                <i class="fas fa-smile"></i>
                 <h3>Easy to Use</h3>
                 <p>Simple and intuitive interface for hassle-free memory storage.</p>
             </div>
@@ -60,5 +64,16 @@
     <footer>
         <p>&copy; 2024 KeepCapsule. All rights reserved.</p>
     </footer>
+    
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
