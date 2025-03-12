@@ -41,7 +41,7 @@ nav .logo {
 }
 
 .hero {
-    background: url('') center/cover no-repeat;
+    background: url('https://source.unsplash.com/1600x900/?family,memory,nostalgia') center/cover no-repeat;
     height: 500px;
     display: flex;
     justify-content: center;
