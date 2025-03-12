@@ -1,4 +1,4 @@
-/* Global Styles */
+/* Updated CSS */
 body {
     font-family: 'Poppins', sans-serif;
     text-align: center;
@@ -8,7 +8,6 @@ body {
     padding: 0;
 }
 
-/* Navigation Bar */
 header {
     background: #2d89ef;
     color: white;
@@ -41,11 +40,15 @@ nav .logo {
     font-size: 1.2em;
 }
 
-/* Hero Section */
 .hero {
-    background: linear-gradient(to right, #2d89ef, #005cbf);
+    background: url('your-image-url.jpg') center/cover no-repeat;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     color: white;
-    padding: 100px 20px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
 }
 
 .hero h1 {
@@ -59,21 +62,21 @@ nav .logo {
 }
 
 .cta-button {
-    background: white;
-    color: #2d89ef;
+    background: #ff6b6b;
+    color: white;
     text-decoration: none;
     padding: 15px 30px;
     border-radius: 5px;
     font-size: 1.2em;
     font-weight: 600;
-    transition: 0.3s;
+    transition: 0.3s ease-in-out;
 }
 
 .cta-button:hover {
-    background: #f0f0f0;
+    background: #ff4f4f;
+    transform: scale(1.05);
 }
 
-/* Features Section */
 .features {
     padding: 80px 20px;
     background: #fff;
@@ -95,19 +98,18 @@ nav .logo {
     text-align: center;
 }
 
-.feature-card h3 {
-    font-size: 1.5em;
+.feature-card i {
+    font-size: 2em;
     color: #2d89ef;
+    margin-bottom: 10px;
 }
 
-/* Join Section */
 .join {
     background: #2d89ef;
     color: white;
     padding: 80px 20px;
 }
 
-/* Footer */
 footer {
     background: #222;
     color: white;
