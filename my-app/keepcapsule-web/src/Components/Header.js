@@ -1,7 +1,7 @@
-// src/Header.js
-import React from 'react';
+// src/components/Header.js
+import React from "react";
 
-const Header = () => {
+const Header = ({ onLoginClick }) => {
   return (
     <header>
       <nav>
@@ -11,9 +11,10 @@ const Header = () => {
           <li><a href="#features">Features</a></li>
           <li><a href="#join">Join Us</a></li>
         </ul>
+        <button className="login-btn" onClick={onLoginClick}>Login</button>
       </nav>
     </header>
   );
 };
 
-export default Header;
+export default Header; 

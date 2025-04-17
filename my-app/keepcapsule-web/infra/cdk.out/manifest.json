@@ -1,0 +1,288 @@
+{
+  "version": "41.0.0",
+  "artifacts": {
+    "KeepCapsuleStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "KeepCapsuleStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "KeepCapsuleStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "KeepCapsuleStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/35d0185eee37871f2bc613ddfecd63da11bd1cd03c41cb1705cb62b4a938ddad.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "KeepCapsuleStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "KeepCapsuleStack.assets"
+      ],
+      "metadata": {
+        "/KeepCapsuleStack/KeepCapsuleBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleBucket68CB5041"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleBucketPolicy2750FDCB"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleBucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleBucketAutoDeleteObjectsCustomResource6AB31865"
+          }
+        ],
+        "/KeepCapsuleStack/LatestNodeRuntimeMap": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LatestNodeRuntimeMap"
+          }
+        ],
+        "/KeepCapsuleStack/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/KeepCapsuleStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/KeepCapsuleStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleUsersTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleUsersTable9F2DED2F"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleLambdaRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleLambdaRole8ED28D2A"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleLambdaRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleLambdaRoleDefaultPolicyF6FB76E2"
+          }
+        ],
+        "/KeepCapsuleStack/registerUserFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "registerUserFunction41AB88D8"
+          }
+        ],
+        "/KeepCapsuleStack/loginUserFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "loginUserFunction1FA81047"
+          }
+        ],
+        "/KeepCapsuleStack/uploadFileFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "uploadFileFunction2DAC78E7"
+          }
+        ],
+        "/KeepCapsuleStack/getFilesFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getFilesFunction3E9EBCF2"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApi4C33AC9E"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/CloudWatchRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiCloudWatchRoleC5058804"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Account": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiAccount05B38966"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiDeployment4E287CA2399e1b02c90d752d1fb91c79a7862d08"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiDeploymentStageprodB4D89F5E"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiEndpoint33F7AA9C"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/register/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiregisterBB57C508"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/register/POST/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..register": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiregisterPOSTApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25POSTregisterB33EC13A"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/register/POST/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..register": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiregisterPOSTApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25POSTregister2E6505AD"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/register/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiregisterPOST9CEEDC29"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/login/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiloginA09757FE"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/login/POST/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..login": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiloginPOSTApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25POSTlogin7A8F2249"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/login/POST/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..login": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiloginPOSTApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25POSTloginF35903CB"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/login/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiloginPOST50D4BABB"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/upload/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiupload367D22CB"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/upload/POST/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..upload": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiuploadPOSTApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25POSTupload9A4FCD5F"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/upload/POST/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..upload": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiuploadPOSTApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25POSTupload9C8437F5"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/upload/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiuploadPOST61E7A679"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/files/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApifiles3B28B6C9"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/files/GET/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.GET..files": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApifilesGETApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25GETfiles1E27A11E"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/files/GET/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.GET..files": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApifilesGETApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25GETfilesE1BE799D"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/files/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApifilesGET851E2711"
+          }
+        ],
+        "/KeepCapsuleStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/KeepCapsuleStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/KeepCapsuleStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/KeepCapsuleStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "KeepCapsuleStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  },
+  "minimumCliVersion": "2.1005.0"
+}
