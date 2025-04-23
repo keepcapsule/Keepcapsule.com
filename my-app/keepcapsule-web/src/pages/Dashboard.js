@@ -1,50 +1,98 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { compressAndUploadFile } from "../utils/compressAndUpload";
 
 const Dashboard = ({ user, onLogout }) => {
-  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
-  // Load user's files from localStorage (mock DB)
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem(user.email)) || {};
-    setUploadedFiles(stored.files || []);
+    const loadFiles = async () => {
+      try {
+        const res = await fetch(
+          `https://87kwlf9dhj.execute-api.eu-west-1.amazonaws.com/prod/files?email=${user.email}`
+        );
+        const data = await res.json();
+        setFiles(data.files || []);
+      } catch (err) {
+        console.error("Error loading files:", err.message);
+      }
+    };
+    loadFiles();
   }, [user.email]);
 
-  // Handle file upload
-  const handleFileUpload = (e) => {
-    const files = Array.from(e.target.files);
-    const fileNames = files.map((file) => file.name);
+  const handleFileChange = (e) => {
+    setSelectedFiles(Array.from(e.target.files));
+  };
 
-    const newFiles = [...uploadedFiles, ...fileNames];
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    for (const file of selectedFiles) {
+      const uploaded = await compressAndUploadFile(file, user.email);
+      if (uploaded.success) {
+        setFiles((prev) => [...prev, uploaded.filename]);
+      } else {
+        alert("Failed to upload: " + uploaded.message);
+      }
+    }
+    setSelectedFiles([]); // Clear selected files
+  };
 
-    // Update localStorage (mock save)
-    localStorage.setItem(user.email, JSON.stringify({ files: newFiles }));
+  const handleDelete = async (filename) => {
+    const res = await fetch(
+      `https://87kwlf9dhj.execute-api.eu-west-1.amazonaws.com/prod/files?email=${user.email}&filename=${filename}`,
+      { method: "DELETE" }
+    );
 
-    setUploadedFiles(newFiles);
+    if (res.ok) {
+      setFiles((prev) => prev.filter((f) => f !== filename));
+    } else {
+      alert("Failed to delete");
+    }
   };
 
   return (
     <div style={styles.container}>
       <h2>Welcome, {user.email}</h2>
 
-      <div style={styles.uploadBox}>
-        <h3>Upload a File</h3>
-        <input type="file" multiple onChange={handleFileUpload} />
-      </div>
+      <form onSubmit={handleUpload} style={styles.uploadBox}>
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleFileChange}
+        />
+        <button type="submit" style={styles.uploadBtn}>
+          Upload
+        </button>
+      </form>
 
-      <div style={styles.fileList}>
-        <h3>Uploaded Files ({uploadedFiles.length})</h3>
-        {uploadedFiles.length > 0 ? (
-          <ul>
-            {uploadedFiles.map((file, idx) => (
-              <li key={idx}>{file}</li>
-            ))}
-          </ul>
-        ) : (
+      <div style={styles.grid}>
+        {files.length === 0 ? (
           <p>No files uploaded yet.</p>
+        ) : (
+          files.map((filename, i) => (
+            <div key={i} style={styles.card}>
+              {filename.match(/\.(jpg|jpeg|png|webp)$/i) ? (
+                <img
+                  src={`https://keepcapsule-user-files.s3.eu-west-1.amazonaws.com/${user.email}/${filename}`}
+                  alt={filename}
+                  style={styles.image}
+                />
+              ) : (
+                <p>{filename}</p>
+              )}
+              <button
+                onClick={() => handleDelete(filename)}
+                style={styles.deleteBtn}
+              >
+                Delete
+              </button>
+            </div>
+          ))
         )}
       </div>
 
-      <button onClick={onLogout} style={styles.logoutBtn}>
+      <button onClick={onLogout} style={styles.logout}>
         Logout
       </button>
     </div>
@@ -53,23 +101,58 @@ const Dashboard = ({ user, onLogout }) => {
 
 const styles = {
   container: {
-    padding: "40px 20px",
-    maxWidth: "600px",
+    padding: "20px",
+    maxWidth: 900,
     margin: "0 auto",
     textAlign: "center",
   },
   uploadBox: {
-    marginBottom: "30px",
+    marginBottom: 30,
   },
-  fileList: {
-    marginBottom: "30px",
-  },
-  logoutBtn: {
+  uploadBtn: {
+    marginTop: 10,
+    padding: "10px 20px",
     backgroundColor: "#2d89ef",
     color: "white",
     border: "none",
-    padding: "10px 20px",
+    borderRadius: "6px",
+    cursor: "pointer",
+    fontWeight: "bold",
+  },
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+    gap: "20px",
+    marginBottom: "30px",
+  },
+  card: {
+    backgroundColor: "#fff",
+    padding: "10px",
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    textAlign: "center",
+  },
+  image: {
+    width: "100%",
+    height: "auto",
     borderRadius: "5px",
+  },
+  deleteBtn: {
+    marginTop: 10,
+    backgroundColor: "#ff6b6b",
+    color: "white",
+    border: "none",
+    padding: "5px 10px",
+    borderRadius: "5px",
+    cursor: "pointer",
+  },
+  logout: {
+    marginTop: 40,
+    backgroundColor: "#2d89ef",
+    color: "white",
+    padding: "10px 20px",
+    border: "none",
+    borderRadius: "6px",
     cursor: "pointer",
     fontWeight: "bold",
   },

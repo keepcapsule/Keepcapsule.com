@@ -315,11 +315,13 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "1d8b04143d46f083ba51f6d2645faa13b87dd2f5c261b0072e60eb1d28789c90.zip"
+     "S3Key": "ddad602b8954028dc7b21cab3d7473cda98b3a511656d788ae906163469fcacd.zip"
     },
     "Environment": {
      "Variables": {
-      "BUCKET_NAME": "KeepCapsuleBucket",
+      "BUCKET_NAME": {
+       "Ref": "KeepCapsuleBucket68CB5041"
+      },
       "USERS_TABLE": "KeepCapsuleUsersTable"
      }
     },
@@ -339,7 +341,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/registerUserFunction/Resource",
-    "aws:asset:path": "asset.1d8b04143d46f083ba51f6d2645faa13b87dd2f5c261b0072e60eb1d28789c90",
+    "aws:asset:path": "asset.ddad602b8954028dc7b21cab3d7473cda98b3a511656d788ae906163469fcacd",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -351,11 +353,13 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "1d8b04143d46f083ba51f6d2645faa13b87dd2f5c261b0072e60eb1d28789c90.zip"
+     "S3Key": "ddad602b8954028dc7b21cab3d7473cda98b3a511656d788ae906163469fcacd.zip"
     },
     "Environment": {
      "Variables": {
-      "BUCKET_NAME": "KeepCapsuleBucket",
+      "BUCKET_NAME": {
+       "Ref": "KeepCapsuleBucket68CB5041"
+      },
       "USERS_TABLE": "KeepCapsuleUsersTable"
      }
     },
@@ -375,7 +379,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/loginUserFunction/Resource",
-    "aws:asset:path": "asset.1d8b04143d46f083ba51f6d2645faa13b87dd2f5c261b0072e60eb1d28789c90",
+    "aws:asset:path": "asset.ddad602b8954028dc7b21cab3d7473cda98b3a511656d788ae906163469fcacd",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -387,11 +391,13 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "1d8b04143d46f083ba51f6d2645faa13b87dd2f5c261b0072e60eb1d28789c90.zip"
+     "S3Key": "ddad602b8954028dc7b21cab3d7473cda98b3a511656d788ae906163469fcacd.zip"
     },
     "Environment": {
      "Variables": {
-      "BUCKET_NAME": "KeepCapsuleBucket",
+      "BUCKET_NAME": {
+       "Ref": "KeepCapsuleBucket68CB5041"
+      },
       "USERS_TABLE": "KeepCapsuleUsersTable"
      }
     },
@@ -411,7 +417,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/uploadFileFunction/Resource",
-    "aws:asset:path": "asset.1d8b04143d46f083ba51f6d2645faa13b87dd2f5c261b0072e60eb1d28789c90",
+    "aws:asset:path": "asset.ddad602b8954028dc7b21cab3d7473cda98b3a511656d788ae906163469fcacd",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -423,11 +429,13 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "1d8b04143d46f083ba51f6d2645faa13b87dd2f5c261b0072e60eb1d28789c90.zip"
+     "S3Key": "ddad602b8954028dc7b21cab3d7473cda98b3a511656d788ae906163469fcacd.zip"
     },
     "Environment": {
      "Variables": {
-      "BUCKET_NAME": "KeepCapsuleBucket",
+      "BUCKET_NAME": {
+       "Ref": "KeepCapsuleBucket68CB5041"
+      },
       "USERS_TABLE": "KeepCapsuleUsersTable"
      }
     },
@@ -447,7 +455,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/getFilesFunction/Resource",
-    "aws:asset:path": "asset.1d8b04143d46f083ba51f6d2645faa13b87dd2f5c261b0072e60eb1d28789c90",
+    "aws:asset:path": "asset.ddad602b8954028dc7b21cab3d7473cda98b3a511656d788ae906163469fcacd",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -516,7 +524,7 @@
     "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Account"
    }
   },
-  "KeepCapsuleApiDeployment4E287CA2399e1b02c90d752d1fb91c79a7862d08": {
+  "KeepCapsuleApiDeployment4E287CA2c8bf0ba481ac37830447ba8573f71fd6": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "Description": "Automatically created by the RestApi construct",
@@ -526,11 +534,13 @@
    },
    "DependsOn": [
     "KeepCapsuleApifilesGET851E2711",
+    "KeepCapsuleApifilesOPTIONS5F75576A",
     "KeepCapsuleApifiles3B28B6C9",
     "KeepCapsuleApiloginPOST50D4BABB",
     "KeepCapsuleApiloginA09757FE",
     "KeepCapsuleApiregisterPOST9CEEDC29",
     "KeepCapsuleApiregisterBB57C508",
+    "KeepCapsuleApiuploadOPTIONS0F24FE92",
     "KeepCapsuleApiuploadPOST61E7A679",
     "KeepCapsuleApiupload367D22CB"
    ],
@@ -542,7 +552,7 @@
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "DeploymentId": {
-     "Ref": "KeepCapsuleApiDeployment4E287CA2399e1b02c90d752d1fb91c79a7862d08"
+     "Ref": "KeepCapsuleApiDeployment4E287CA2c8bf0ba481ac37830447ba8573f71fd6"
     },
     "RestApiId": {
      "Ref": "KeepCapsuleApi4C33AC9E"
@@ -864,6 +874,49 @@
     "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/upload/Resource"
    }
   },
+  "KeepCapsuleApiuploadOPTIONS0F24FE92": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "KeepCapsuleApiupload367D22CB"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/upload/OPTIONS/Resource"
+   }
+  },
   "KeepCapsuleApiuploadPOSTApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25POSTupload9A4FCD5F": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
@@ -980,6 +1033,15 @@
       ]
      }
     },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true,
+       "method.response.header.Access-Control-Allow-Headers": true
+      },
+      "StatusCode": "200"
+     }
+    ],
     "ResourceId": {
      "Ref": "KeepCapsuleApiupload367D22CB"
     },
@@ -1007,6 +1069,49 @@
    },
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/Resource"
+   }
+  },
+  "KeepCapsuleApifilesOPTIONS5F75576A": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "KeepCapsuleApifiles3B28B6C9"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/OPTIONS/Resource"
    }
   },
   "KeepCapsuleApifilesGETApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25GETfiles1E27A11E": {
@@ -1125,6 +1230,14 @@
       ]
      }
     },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
     "ResourceId": {
      "Ref": "KeepCapsuleApifiles3B28B6C9"
     },

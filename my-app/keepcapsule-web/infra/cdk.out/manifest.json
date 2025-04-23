@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/35d0185eee37871f2bc613ddfecd63da11bd1cd03c41cb1705cb62b4a938ddad.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1ea406f6712934e709d6ce299338972b4191d20dadf94426a84ec0db949dd21d.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -139,7 +139,7 @@
         "/KeepCapsuleStack/KeepCapsuleApi/Deployment/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "KeepCapsuleApiDeployment4E287CA2399e1b02c90d752d1fb91c79a7862d08"
+            "data": "KeepCapsuleApiDeployment4E287CA2c8bf0ba481ac37830447ba8573f71fd6"
           }
         ],
         "/KeepCapsuleStack/KeepCapsuleApi/DeploymentStage.prod/Resource": [
@@ -208,6 +208,12 @@
             "data": "KeepCapsuleApiupload367D22CB"
           }
         ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/upload/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApiuploadOPTIONS0F24FE92"
+          }
+        ],
         "/KeepCapsuleStack/KeepCapsuleApi/Default/upload/POST/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..upload": [
           {
             "type": "aws:cdk:logicalId",
@@ -230,6 +236,12 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "KeepCapsuleApifiles3B28B6C9"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/files/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApifilesOPTIONS5F75576A"
           }
         ],
         "/KeepCapsuleStack/KeepCapsuleApi/Default/files/GET/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.GET..files": [

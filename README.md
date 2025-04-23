@@ -29,3 +29,11 @@ make sure leapp is running
 export AWS_PROFILE=keepcapsule-deploy
 npx cdk bootstrap
 npx cdk deploy
+
+<!-- project structure -->
+
+/infra <- CDK backend project
+/src <- React frontend
+/src/lambdas <- Local copy of Lambda functions
+/src/pages <- Dashboard and auth flows
+/src/utils <- Helpers (we’ll use these for API and compression)

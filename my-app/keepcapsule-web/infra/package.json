@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "aws-cdk-lib": "^2.190.0",
+    "browser-image-compression": "^2.0.2",
     "constructs": "^10.4.2"
   },
   "devDependencies": {

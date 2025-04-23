@@ -73,6 +73,8 @@ const App = () => {
           setIsLogin(true);
           setShowModal(true);
         }}
+        user={loggedInUser}
+        onLogout={handleLogout}
       />
       <AuthModal
         showModal={showModal}
