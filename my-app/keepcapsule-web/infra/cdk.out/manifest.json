@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1ea406f6712934e709d6ce299338972b4191d20dadf94426a84ec0db949dd21d.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/a68e6654a73a6ca774e81794eae3ba24bf4ac0e01dde24ba662d7ddc19aeed2e.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -118,6 +118,12 @@
             "data": "getFilesFunction3E9EBCF2"
           }
         ],
+        "/KeepCapsuleStack/deleteFileFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "deleteFileFunction648E9D10"
+          }
+        ],
         "/KeepCapsuleStack/KeepCapsuleApi/Resource": [
           {
             "type": "aws:cdk:logicalId",
@@ -139,7 +145,7 @@
         "/KeepCapsuleStack/KeepCapsuleApi/Deployment/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "KeepCapsuleApiDeployment4E287CA2c8bf0ba481ac37830447ba8573f71fd6"
+            "data": "KeepCapsuleApiDeployment4E287CA2e3c002b0f151f3a86eaf6fb7d7e941b0"
           }
         ],
         "/KeepCapsuleStack/KeepCapsuleApi/DeploymentStage.prod/Resource": [
@@ -260,6 +266,24 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "KeepCapsuleApifilesGET851E2711"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/files/DELETE/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.DELETE..files": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApifilesDELETEApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25DELETEfilesAD502608"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/files/DELETE/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.DELETE..files": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApifilesDELETEApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25DELETEfiles9CEBD6F0"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/files/DELETE/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApifilesDELETE472E6597"
           }
         ],
         "/KeepCapsuleStack/CDKMetadata/Default": [

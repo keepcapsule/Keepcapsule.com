@@ -72,14 +72,14 @@ const Dashboard = ({ user, onLogout }) => {
         ) : (
           files.map((filename, i) => (
             <div key={i} style={styles.card}>
-              {filename.match(/\.(jpg|jpeg|png|webp)$/i) ? (
+              {filename && filename.match(/\.(jpg|jpeg|png|webp)$/i) ? (
                 <img
                   src={`https://keepcapsule-user-files.s3.eu-west-1.amazonaws.com/${user.email}/${filename}`}
                   alt={filename}
                   style={styles.image}
                 />
               ) : (
-                <p>{filename}</p>
+                <p>{filename || "Unnamed file"}</p>
               )}
               <button
                 onClick={() => handleDelete(filename)}

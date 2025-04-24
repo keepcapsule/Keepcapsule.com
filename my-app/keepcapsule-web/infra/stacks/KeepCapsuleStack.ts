@@ -10,20 +10,17 @@ export class KeepCapsuleStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    // ✅ S3 Bucket
     const fileBucket = new s3.Bucket(this, "KeepCapsuleBucket", {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
     });
 
-    // ✅ DynamoDB Table
     const usersTable = new dynamodb.Table(this, "KeepCapsuleUsersTable", {
       partitionKey: { name: "customerId", type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
-    // ✅ IAM Role for Lambdas
     const lambdaRole = new iam.Role(this, "KeepCapsuleLambdaRole", {
       assumedBy: new iam.ServicePrincipal("lambda.amazonaws.com"),
     });
@@ -37,7 +34,6 @@ export class KeepCapsuleStack extends Stack {
     fileBucket.grantReadWrite(lambdaRole);
     usersTable.grantReadWriteData(lambdaRole);
 
-    // ✅ Lambda Functions
     const registerUser = this.createFunction(
       "registerUser",
       lambdaRole,
@@ -50,8 +46,12 @@ export class KeepCapsuleStack extends Stack {
       fileBucket
     );
     const getFiles = this.createFunction("getFiles", lambdaRole, fileBucket);
+    const deleteFile = this.createFunction(
+      "deleteFile",
+      lambdaRole,
+      fileBucket
+    ); // ✅ add this if not already
 
-    // ✅ API Gateway
     const api = new apigateway.RestApi(this, "KeepCapsuleApi", {
       restApiName: "KeepCapsule Service",
     });
@@ -65,7 +65,7 @@ export class KeepCapsuleStack extends Stack {
     const upload = api.root.addResource("upload");
     const files = api.root.addResource("files");
 
-    // ✅ OPTIONS method for /upload (CORS)
+    // ✅ CORS for /upload
     upload.addMethod(
       "OPTIONS",
       new apigateway.MockIntegration({
@@ -97,7 +97,6 @@ export class KeepCapsuleStack extends Stack {
       }
     );
 
-    // ✅ POST method with CORS headers
     upload.addMethod("POST", new apigateway.LambdaIntegration(uploadFile), {
       methodResponses: [
         {
@@ -110,7 +109,7 @@ export class KeepCapsuleStack extends Stack {
       ],
     });
 
-    // ✅ OPTIONS method for /files (CORS)
+    // ✅ CORS for /files (GET + DELETE)
     files.addMethod(
       "OPTIONS",
       new apigateway.MockIntegration({
@@ -120,7 +119,7 @@ export class KeepCapsuleStack extends Stack {
             responseParameters: {
               "method.response.header.Access-Control-Allow-Headers": "'*'",
               "method.response.header.Access-Control-Allow-Methods":
-                "'OPTIONS,GET'",
+                "'OPTIONS,GET,DELETE'",
               "method.response.header.Access-Control-Allow-Origin": "'*'",
             },
           },
@@ -142,13 +141,25 @@ export class KeepCapsuleStack extends Stack {
       }
     );
 
-    // ✅ GET method with CORS headers
     files.addMethod("GET", new apigateway.LambdaIntegration(getFiles), {
       methodResponses: [
         {
           statusCode: "200",
           responseParameters: {
             "method.response.header.Access-Control-Allow-Origin": true,
+            "method.response.header.Access-Control-Allow-Headers": true,
+          },
+        },
+      ],
+    });
+
+    files.addMethod("DELETE", new apigateway.LambdaIntegration(deleteFile), {
+      methodResponses: [
+        {
+          statusCode: "200",
+          responseParameters: {
+            "method.response.header.Access-Control-Allow-Origin": true,
+            "method.response.header.Access-Control-Allow-Headers": true,
           },
         },
       ],
@@ -162,7 +173,7 @@ export class KeepCapsuleStack extends Stack {
   ): lambda.Function {
     return new lambda.Function(this, `${name}Function`, {
       runtime: lambda.Runtime.NODEJS_18_X,
-      code: lambda.Code.fromAsset("src/lambdas"),
+      code: lambda.Code.fromAsset("src/lambdas"), // this is where your .js files live
       handler: `${name}.handler`,
       role,
       timeout: Duration.seconds(10),
