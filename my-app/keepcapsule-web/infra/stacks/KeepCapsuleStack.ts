@@ -1,10 +1,11 @@
-import { Stack, StackProps, RemovalPolicy, Duration } from "aws-cdk-lib";
+import { Stack, StackProps, RemovalPolicy } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as apigateway from "aws-cdk-lib/aws-apigateway";
+import { Duration } from "aws-cdk-lib";
 
 export class KeepCapsuleStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -13,6 +14,8 @@ export class KeepCapsuleStack extends Stack {
     const fileBucket = new s3.Bucket(this, "KeepCapsuleBucket", {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
+      publicReadAccess: true, // ✅ allow read access for previews
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS, // ✅ safer public access
     });
 
     const usersTable = new dynamodb.Table(this, "KeepCapsuleUsersTable", {
@@ -50,10 +53,11 @@ export class KeepCapsuleStack extends Stack {
       "deleteFile",
       lambdaRole,
       fileBucket
-    ); // ✅ add this if not already
+    ); // Keep if already added.
 
     const api = new apigateway.RestApi(this, "KeepCapsuleApi", {
       restApiName: "KeepCapsule Service",
+      binaryMediaTypes: ["multipart/form-data"], // ✅ CRITICAL FIX!
     });
 
     const register = api.root.addResource("register");
@@ -65,7 +69,6 @@ export class KeepCapsuleStack extends Stack {
     const upload = api.root.addResource("upload");
     const files = api.root.addResource("files");
 
-    // ✅ CORS for /upload
     upload.addMethod(
       "OPTIONS",
       new apigateway.MockIntegration({
@@ -109,7 +112,6 @@ export class KeepCapsuleStack extends Stack {
       ],
     });
 
-    // ✅ CORS for /files (GET + DELETE)
     files.addMethod(
       "OPTIONS",
       new apigateway.MockIntegration({
@@ -173,7 +175,7 @@ export class KeepCapsuleStack extends Stack {
   ): lambda.Function {
     return new lambda.Function(this, `${name}Function`, {
       runtime: lambda.Runtime.NODEJS_18_X,
-      code: lambda.Code.fromAsset("src/lambdas"), // this is where your .js files live
+      code: lambda.Code.fromAsset("src/lambdas"),
       handler: `${name}.handler`,
       role,
       timeout: Duration.seconds(10),

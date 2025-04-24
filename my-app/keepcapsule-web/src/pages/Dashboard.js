@@ -34,7 +34,7 @@ const Dashboard = ({ user, onLogout }) => {
         alert("Failed to upload: " + uploaded.message);
       }
     }
-    setSelectedFiles([]); // Clear selected files
+    setSelectedFiles([]);
   };
 
   const handleDelete = async (filename) => {
@@ -72,14 +72,14 @@ const Dashboard = ({ user, onLogout }) => {
         ) : (
           files.map((filename, i) => (
             <div key={i} style={styles.card}>
-              {filename && filename.match(/\.(jpg|jpeg|png|webp)$/i) ? (
+              {filename.match(/\.(jpg|jpeg|png|webp)$/i) ? (
                 <img
-                  src={`https://keepcapsule-user-files.s3.eu-west-1.amazonaws.com/${user.email}/${filename}`}
+                  src={`https://keepcapsulestack-keepcapsulebucket68cb5041-baq4fianccuy.s3.eu-west-1.amazonaws.com/${user.email}/${filename}`}
                   alt={filename}
                   style={styles.image}
                 />
               ) : (
-                <p>{filename || "Unnamed file"}</p>
+                <p>{filename}</p>
               )}
               <button
                 onClick={() => handleDelete(filename)}

@@ -32,6 +32,9 @@ export const compressAndUploadFile = async (file, email) => {
       }
     );
 
+    // Wait for a second to ensure the file is processed
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     const data = await res.json();
     return {
       success: res.ok,

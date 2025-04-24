@@ -3,6 +3,10 @@
   "KeepCapsuleBucket68CB5041": {
    "Type": "AWS::S3::Bucket",
    "Properties": {
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "IgnorePublicAcls": true
+    },
     "Tags": [
      {
       "Key": "aws-cdk:auto-delete-objects",
@@ -24,6 +28,27 @@
     },
     "PolicyDocument": {
      "Statement": [
+      {
+       "Action": "s3:GetObject",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "KeepCapsuleBucket68CB5041",
+            "Arn"
+           ]
+          },
+          "/*"
+         ]
+        ]
+       }
+      },
       {
        "Action": [
         "s3:PutBucketPolicy",
@@ -315,7 +340,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "97bb6b094607202067c72aa04688abad4341de697b2bff06ebf824e8878480f2.zip"
+     "S3Key": "b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8.zip"
     },
     "Environment": {
      "Variables": {
@@ -341,7 +366,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/registerUserFunction/Resource",
-    "aws:asset:path": "asset.97bb6b094607202067c72aa04688abad4341de697b2bff06ebf824e8878480f2",
+    "aws:asset:path": "asset.b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -353,7 +378,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "97bb6b094607202067c72aa04688abad4341de697b2bff06ebf824e8878480f2.zip"
+     "S3Key": "b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8.zip"
     },
     "Environment": {
      "Variables": {
@@ -379,7 +404,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/loginUserFunction/Resource",
-    "aws:asset:path": "asset.97bb6b094607202067c72aa04688abad4341de697b2bff06ebf824e8878480f2",
+    "aws:asset:path": "asset.b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -391,7 +416,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "97bb6b094607202067c72aa04688abad4341de697b2bff06ebf824e8878480f2.zip"
+     "S3Key": "b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8.zip"
     },
     "Environment": {
      "Variables": {
@@ -417,7 +442,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/uploadFileFunction/Resource",
-    "aws:asset:path": "asset.97bb6b094607202067c72aa04688abad4341de697b2bff06ebf824e8878480f2",
+    "aws:asset:path": "asset.b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -429,7 +454,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "97bb6b094607202067c72aa04688abad4341de697b2bff06ebf824e8878480f2.zip"
+     "S3Key": "b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8.zip"
     },
     "Environment": {
      "Variables": {
@@ -455,7 +480,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/getFilesFunction/Resource",
-    "aws:asset:path": "asset.97bb6b094607202067c72aa04688abad4341de697b2bff06ebf824e8878480f2",
+    "aws:asset:path": "asset.b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -467,7 +492,7 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "97bb6b094607202067c72aa04688abad4341de697b2bff06ebf824e8878480f2.zip"
+     "S3Key": "b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8.zip"
     },
     "Environment": {
      "Variables": {
@@ -493,7 +518,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/deleteFileFunction/Resource",
-    "aws:asset:path": "asset.97bb6b094607202067c72aa04688abad4341de697b2bff06ebf824e8878480f2",
+    "aws:asset:path": "asset.b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -501,6 +526,9 @@
   "KeepCapsuleApi4C33AC9E": {
    "Type": "AWS::ApiGateway::RestApi",
    "Properties": {
+    "BinaryMediaTypes": [
+     "multipart/form-data"
+    ],
     "Name": "KeepCapsule Service"
    },
    "Metadata": {
@@ -562,7 +590,7 @@
     "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Account"
    }
   },
-  "KeepCapsuleApiDeployment4E287CA2e3c002b0f151f3a86eaf6fb7d7e941b0": {
+  "KeepCapsuleApiDeployment4E287CA2a27c7beb658950a6c5fc97b90a1c9fdf": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "Description": "Automatically created by the RestApi construct",
@@ -591,7 +619,7 @@
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "DeploymentId": {
-     "Ref": "KeepCapsuleApiDeployment4E287CA2e3c002b0f151f3a86eaf6fb7d7e941b0"
+     "Ref": "KeepCapsuleApiDeployment4E287CA2a27c7beb658950a6c5fc97b90a1c9fdf"
     },
     "RestApiId": {
      "Ref": "KeepCapsuleApi4C33AC9E"
