@@ -10,13 +10,13 @@ const Join = () => {
         <a href="https://forms.gle/G8UD9xjjRcy1C2wF9" className="cta-button">
           Join the Waitlist
         </a>
-        <a
+        {/* <a
           href="https://buy.stripe.com/fZeeWFd3ubxp0iQ3cc"
           className="cta-button subscribe"
         >
           Subscribe for only £5.99/month
         </a>
-        <p>first 30 days are free</p>
+        <p>first 30 days are free</p> */}
       </div>
     </section>
   );
