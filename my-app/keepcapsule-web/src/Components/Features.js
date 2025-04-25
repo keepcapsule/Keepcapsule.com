@@ -40,19 +40,19 @@ const Features = () => {
 
         <h3>Key Benefits</h3>
         <ul>
-          <li>
+          <p>
             <strong>Secure Storage:</strong> Your files are encrypted and backed
             by trusted AWS cloud infrastructure.
-          </li>
-          <li>
+          </p>
+          <p>
             <strong>Forever Access:</strong> You’ll never lose access to your
             capsule. What you upload stays with you for life.
-          </li>
-          <li>
+          </p>
+          <p>
             <strong>Simple Experience:</strong> Upload from any device with no
             complicated steps — just create your capsule and start adding
             memories.
-          </li>
+          </p>
         </ul>
 
         <h3>How Much Does It Cost?</h3>
