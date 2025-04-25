@@ -46,3 +46,9 @@ npx cdk deploy
 - keepcapsule web
   npm i
   npm run build
+
+<!-- Step	Command -->
+
+1. Go to frontend ---- cd keepcapsule-web
+2. Deploy frontend to GitHub Pages ---- npm run deploy
+3. Deploy backend to AWS (if changed) ---- cd infra && cdk deploy
