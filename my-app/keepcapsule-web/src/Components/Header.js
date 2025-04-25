@@ -11,7 +11,7 @@ const Header = ({ onLoginClick, user, onLogout }) => {
         <div className="logo">KeepCapsule</div>
         <ul className="nav-links">
           <li>
-            <Link to="/">About</Link>
+            <Link to="/">Home</Link>
           </li>
           <li>
             <Link to="/">Features</Link>

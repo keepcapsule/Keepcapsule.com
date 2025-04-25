@@ -1,5 +1,8 @@
 # Keepcapsule.com
 
+📂 my-app/keepcapsule-web/ → This is your frontend React app
+📂 my-app/keepcapsule-web/infra/ → This is your CDK backend (infra)
+
 Never lose a memory. Keep them safe forever.
 
 <!-- to zip a file  -->
@@ -37,3 +40,9 @@ npx cdk deploy
 /src/lambdas <- Local copy of Lambda functions
 /src/pages <- Dashboard and auth flows
 /src/utils <- Helpers (we’ll use these for API and compression)
+
+<!-- deploy front end  -->
+
+- keepcapsule web
+  npm i
+  npm run build
