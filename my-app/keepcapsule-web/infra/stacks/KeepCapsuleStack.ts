@@ -14,9 +14,20 @@ export class KeepCapsuleStack extends Stack {
     const fileBucket = new s3.Bucket(this, "KeepCapsuleBucket", {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
-      publicReadAccess: true, // ✅ allow read access for previews
-      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS, // ✅ safer public access
+      publicReadAccess: true,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
     });
+
+    const fileMetadataTable = new dynamodb.Table(
+      this,
+      "KeepCapsuleFileMetadata",
+      {
+        partitionKey: { name: "email", type: dynamodb.AttributeType.STRING },
+        sortKey: { name: "filename", type: dynamodb.AttributeType.STRING },
+        billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+        removalPolicy: RemovalPolicy.DESTROY,
+      }
+    );
 
     const usersTable = new dynamodb.Table(this, "KeepCapsuleUsersTable", {
       partitionKey: { name: "customerId", type: dynamodb.AttributeType.STRING },
@@ -35,143 +46,120 @@ export class KeepCapsuleStack extends Stack {
     );
 
     fileBucket.grantReadWrite(lambdaRole);
+    fileMetadataTable.grantReadWriteData(lambdaRole);
     usersTable.grantReadWriteData(lambdaRole);
 
     const registerUser = this.createFunction(
       "registerUser",
       lambdaRole,
-      fileBucket
+      fileBucket,
+      fileMetadataTable
     );
-    const loginUser = this.createFunction("loginUser", lambdaRole, fileBucket);
+    const loginUser = this.createFunction(
+      "loginUser",
+      lambdaRole,
+      fileBucket,
+      fileMetadataTable
+    );
     const uploadFile = this.createFunction(
       "uploadFile",
       lambdaRole,
-      fileBucket
+      fileBucket,
+      fileMetadataTable
     );
-    const getFiles = this.createFunction("getFiles", lambdaRole, fileBucket);
+    const getFiles = this.createFunction(
+      "getFiles",
+      lambdaRole,
+      fileBucket,
+      fileMetadataTable
+    );
     const deleteFile = this.createFunction(
       "deleteFile",
       lambdaRole,
-      fileBucket
-    ); // Keep if already added.
+      fileBucket,
+      fileMetadataTable
+    );
+    const getUserStorage = this.createFunction(
+      "getUserStorage",
+      lambdaRole,
+      fileBucket,
+      fileMetadataTable
+    );
+    const mockUsage = this.createFunction(
+      "mockStorageUsage",
+      lambdaRole,
+      fileBucket,
+      fileMetadataTable
+    );
 
     const api = new apigateway.RestApi(this, "KeepCapsuleApi", {
       restApiName: "KeepCapsule Service",
-      binaryMediaTypes: ["multipart/form-data"], // ✅ CRITICAL FIX!
+      binaryMediaTypes: ["multipart/form-data"],
     });
+
+    const addCorsOptions = (resource: apigateway.Resource, methods: string) => {
+      resource.addMethod(
+        "OPTIONS",
+        new apigateway.MockIntegration({
+          integrationResponses: [
+            {
+              statusCode: "200",
+              responseParameters: {
+                "method.response.header.Access-Control-Allow-Headers": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": `'OPTIONS,${methods}'`,
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+              },
+            },
+          ],
+          passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
+          requestTemplates: { "application/json": '{"statusCode": 200}' },
+        }),
+        {
+          methodResponses: [
+            {
+              statusCode: "200",
+              responseParameters: {
+                "method.response.header.Access-Control-Allow-Headers": true,
+                "method.response.header.Access-Control-Allow-Methods": true,
+                "method.response.header.Access-Control-Allow-Origin": true,
+              },
+            },
+          ],
+        }
+      );
+    };
 
     const register = api.root.addResource("register");
     register.addMethod("POST", new apigateway.LambdaIntegration(registerUser));
+    addCorsOptions(register, "POST");
 
     const login = api.root.addResource("login");
     login.addMethod("POST", new apigateway.LambdaIntegration(loginUser));
+    addCorsOptions(login, "POST");
 
     const upload = api.root.addResource("upload");
+    upload.addMethod("POST", new apigateway.LambdaIntegration(uploadFile));
+    addCorsOptions(upload, "POST");
+
     const files = api.root.addResource("files");
+    files.addMethod("GET", new apigateway.LambdaIntegration(getFiles));
+    files.addMethod("DELETE", new apigateway.LambdaIntegration(deleteFile));
+    addCorsOptions(files, "GET,DELETE");
 
-    upload.addMethod(
-      "OPTIONS",
-      new apigateway.MockIntegration({
-        integrationResponses: [
-          {
-            statusCode: "200",
-            responseParameters: {
-              "method.response.header.Access-Control-Allow-Headers": "'*'",
-              "method.response.header.Access-Control-Allow-Methods":
-                "'OPTIONS,POST'",
-              "method.response.header.Access-Control-Allow-Origin": "'*'",
-            },
-          },
-        ],
-        passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
-        requestTemplates: { "application/json": '{"statusCode": 200}' },
-      }),
-      {
-        methodResponses: [
-          {
-            statusCode: "200",
-            responseParameters: {
-              "method.response.header.Access-Control-Allow-Headers": true,
-              "method.response.header.Access-Control-Allow-Methods": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-            },
-          },
-        ],
-      }
-    );
+    const usage = api.root.addResource("usage");
+    usage.addMethod("GET", new apigateway.LambdaIntegration(getUserStorage));
+    addCorsOptions(usage, "GET");
 
-    upload.addMethod("POST", new apigateway.LambdaIntegration(uploadFile), {
-      methodResponses: [
-        {
-          statusCode: "200",
-          responseParameters: {
-            "method.response.header.Access-Control-Allow-Origin": true,
-            "method.response.header.Access-Control-Allow-Headers": true,
-          },
-        },
-      ],
-    });
-
-    files.addMethod(
-      "OPTIONS",
-      new apigateway.MockIntegration({
-        integrationResponses: [
-          {
-            statusCode: "200",
-            responseParameters: {
-              "method.response.header.Access-Control-Allow-Headers": "'*'",
-              "method.response.header.Access-Control-Allow-Methods":
-                "'OPTIONS,GET,DELETE'",
-              "method.response.header.Access-Control-Allow-Origin": "'*'",
-            },
-          },
-        ],
-        passthroughBehavior: apigateway.PassthroughBehavior.NEVER,
-        requestTemplates: { "application/json": '{"statusCode": 200}' },
-      }),
-      {
-        methodResponses: [
-          {
-            statusCode: "200",
-            responseParameters: {
-              "method.response.header.Access-Control-Allow-Headers": true,
-              "method.response.header.Access-Control-Allow-Methods": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-            },
-          },
-        ],
-      }
-    );
-
-    files.addMethod("GET", new apigateway.LambdaIntegration(getFiles), {
-      methodResponses: [
-        {
-          statusCode: "200",
-          responseParameters: {
-            "method.response.header.Access-Control-Allow-Origin": true,
-            "method.response.header.Access-Control-Allow-Headers": true,
-          },
-        },
-      ],
-    });
-
-    files.addMethod("DELETE", new apigateway.LambdaIntegration(deleteFile), {
-      methodResponses: [
-        {
-          statusCode: "200",
-          responseParameters: {
-            "method.response.header.Access-Control-Allow-Origin": true,
-            "method.response.header.Access-Control-Allow-Headers": true,
-          },
-        },
-      ],
-    });
+    const mock = api.root.addResource("mock-usage");
+    mock.addMethod("GET", new apigateway.LambdaIntegration(mockUsage));
+    addCorsOptions(mock, "GET");
   }
 
   private createFunction(
     name: string,
     role: iam.Role,
-    bucket: s3.Bucket
+    bucket: s3.Bucket,
+    metadataTable: dynamodb.Table
   ): lambda.Function {
     return new lambda.Function(this, `${name}Function`, {
       runtime: lambda.Runtime.NODEJS_18_X,
@@ -182,6 +170,7 @@ export class KeepCapsuleStack extends Stack {
       environment: {
         BUCKET_NAME: bucket.bucketName,
         USERS_TABLE: "KeepCapsuleUsersTable",
+        METADATA_TABLE: metadataTable.tableName,
       },
     });
   }

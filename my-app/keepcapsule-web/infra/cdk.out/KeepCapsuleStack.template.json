@@ -192,6 +192,37 @@
     "aws:asset:property": "Code"
    }
   },
+  "KeepCapsuleFileMetadataD0D8409C": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "email",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "filename",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "email",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "filename",
+      "KeyType": "RANGE"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleFileMetadata/Resource"
+   }
+  },
   "KeepCapsuleUsersTable9F2DED2F": {
    "Type": "AWS::DynamoDB::Table",
    "Properties": {
@@ -310,6 +341,34 @@
        "Resource": [
         {
          "Fn::GetAtt": [
+          "KeepCapsuleFileMetadataD0D8409C",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:GetItem",
+        "dynamodb:Scan",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
           "KeepCapsuleUsersTable9F2DED2F",
           "Arn"
          ]
@@ -340,14 +399,17 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8.zip"
+     "S3Key": "3721ff1d233e89d00cafc32863d602ff541b4cee678c618bfd4f315acf9f3d87.zip"
     },
     "Environment": {
      "Variables": {
       "BUCKET_NAME": {
        "Ref": "KeepCapsuleBucket68CB5041"
       },
-      "USERS_TABLE": "KeepCapsuleUsersTable"
+      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "METADATA_TABLE": {
+       "Ref": "KeepCapsuleFileMetadataD0D8409C"
+      }
      }
     },
     "Handler": "registerUser.handler",
@@ -366,7 +428,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/registerUserFunction/Resource",
-    "aws:asset:path": "asset.b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8",
+    "aws:asset:path": "asset.3721ff1d233e89d00cafc32863d602ff541b4cee678c618bfd4f315acf9f3d87",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -378,14 +440,17 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8.zip"
+     "S3Key": "3721ff1d233e89d00cafc32863d602ff541b4cee678c618bfd4f315acf9f3d87.zip"
     },
     "Environment": {
      "Variables": {
       "BUCKET_NAME": {
        "Ref": "KeepCapsuleBucket68CB5041"
       },
-      "USERS_TABLE": "KeepCapsuleUsersTable"
+      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "METADATA_TABLE": {
+       "Ref": "KeepCapsuleFileMetadataD0D8409C"
+      }
      }
     },
     "Handler": "loginUser.handler",
@@ -404,7 +469,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/loginUserFunction/Resource",
-    "aws:asset:path": "asset.b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8",
+    "aws:asset:path": "asset.3721ff1d233e89d00cafc32863d602ff541b4cee678c618bfd4f315acf9f3d87",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -416,14 +481,17 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8.zip"
+     "S3Key": "3721ff1d233e89d00cafc32863d602ff541b4cee678c618bfd4f315acf9f3d87.zip"
     },
     "Environment": {
      "Variables": {
       "BUCKET_NAME": {
        "Ref": "KeepCapsuleBucket68CB5041"
       },
-      "USERS_TABLE": "KeepCapsuleUsersTable"
+      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "METADATA_TABLE": {
+       "Ref": "KeepCapsuleFileMetadataD0D8409C"
+      }
      }
     },
     "Handler": "uploadFile.handler",
@@ -442,7 +510,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/uploadFileFunction/Resource",
-    "aws:asset:path": "asset.b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8",
+    "aws:asset:path": "asset.3721ff1d233e89d00cafc32863d602ff541b4cee678c618bfd4f315acf9f3d87",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -454,14 +522,17 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8.zip"
+     "S3Key": "3721ff1d233e89d00cafc32863d602ff541b4cee678c618bfd4f315acf9f3d87.zip"
     },
     "Environment": {
      "Variables": {
       "BUCKET_NAME": {
        "Ref": "KeepCapsuleBucket68CB5041"
       },
-      "USERS_TABLE": "KeepCapsuleUsersTable"
+      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "METADATA_TABLE": {
+       "Ref": "KeepCapsuleFileMetadataD0D8409C"
+      }
      }
     },
     "Handler": "getFiles.handler",
@@ -480,7 +551,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/getFilesFunction/Resource",
-    "aws:asset:path": "asset.b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8",
+    "aws:asset:path": "asset.3721ff1d233e89d00cafc32863d602ff541b4cee678c618bfd4f315acf9f3d87",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -492,14 +563,17 @@
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8.zip"
+     "S3Key": "3721ff1d233e89d00cafc32863d602ff541b4cee678c618bfd4f315acf9f3d87.zip"
     },
     "Environment": {
      "Variables": {
       "BUCKET_NAME": {
        "Ref": "KeepCapsuleBucket68CB5041"
       },
-      "USERS_TABLE": "KeepCapsuleUsersTable"
+      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "METADATA_TABLE": {
+       "Ref": "KeepCapsuleFileMetadataD0D8409C"
+      }
      }
     },
     "Handler": "deleteFile.handler",
@@ -518,7 +592,89 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/deleteFileFunction/Resource",
-    "aws:asset:path": "asset.b3901d2c2dcf917c6c677567450d56b8c4ef0004341480014dc19a7ea3eca5a8",
+    "aws:asset:path": "asset.3721ff1d233e89d00cafc32863d602ff541b4cee678c618bfd4f315acf9f3d87",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "getUserStorageFunction6A82096B": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "3721ff1d233e89d00cafc32863d602ff541b4cee678c618bfd4f315acf9f3d87.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "BUCKET_NAME": {
+       "Ref": "KeepCapsuleBucket68CB5041"
+      },
+      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "METADATA_TABLE": {
+       "Ref": "KeepCapsuleFileMetadataD0D8409C"
+      }
+     }
+    },
+    "Handler": "getUserStorage.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "KeepCapsuleLambdaRole8ED28D2A",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "KeepCapsuleLambdaRoleDefaultPolicyF6FB76E2",
+    "KeepCapsuleLambdaRole8ED28D2A"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/getUserStorageFunction/Resource",
+    "aws:asset:path": "asset.3721ff1d233e89d00cafc32863d602ff541b4cee678c618bfd4f315acf9f3d87",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "mockStorageUsageFunction3985941F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "3721ff1d233e89d00cafc32863d602ff541b4cee678c618bfd4f315acf9f3d87.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "BUCKET_NAME": {
+       "Ref": "KeepCapsuleBucket68CB5041"
+      },
+      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "METADATA_TABLE": {
+       "Ref": "KeepCapsuleFileMetadataD0D8409C"
+      }
+     }
+    },
+    "Handler": "mockStorageUsage.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "KeepCapsuleLambdaRole8ED28D2A",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "KeepCapsuleLambdaRoleDefaultPolicyF6FB76E2",
+    "KeepCapsuleLambdaRole8ED28D2A"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/mockStorageUsageFunction/Resource",
+    "aws:asset:path": "asset.3721ff1d233e89d00cafc32863d602ff541b4cee678c618bfd4f315acf9f3d87",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -590,7 +746,7 @@
     "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Account"
    }
   },
-  "KeepCapsuleApiDeployment4E287CA2a27c7beb658950a6c5fc97b90a1c9fdf": {
+  "KeepCapsuleApiDeployment4E287CA2aa267b0ac7254ce9880bf4baca00676c": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "Description": "Automatically created by the RestApi construct",
@@ -603,13 +759,21 @@
     "KeepCapsuleApifilesGET851E2711",
     "KeepCapsuleApifilesOPTIONS5F75576A",
     "KeepCapsuleApifiles3B28B6C9",
+    "KeepCapsuleApiloginOPTIONS38E0F8B7",
     "KeepCapsuleApiloginPOST50D4BABB",
     "KeepCapsuleApiloginA09757FE",
+    "KeepCapsuleApimockusageGET299568D7",
+    "KeepCapsuleApimockusageOPTIONS6D5FD3CC",
+    "KeepCapsuleApimockusageFAAA6340",
+    "KeepCapsuleApiregisterOPTIONS2857CCB4",
     "KeepCapsuleApiregisterPOST9CEEDC29",
     "KeepCapsuleApiregisterBB57C508",
     "KeepCapsuleApiuploadOPTIONS0F24FE92",
     "KeepCapsuleApiuploadPOST61E7A679",
-    "KeepCapsuleApiupload367D22CB"
+    "KeepCapsuleApiupload367D22CB",
+    "KeepCapsuleApiusageGET844C9BA8",
+    "KeepCapsuleApiusageOPTIONS4278A38C",
+    "KeepCapsuleApiusage49ABA00E"
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Deployment/Resource"
@@ -619,7 +783,7 @@
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "DeploymentId": {
-     "Ref": "KeepCapsuleApiDeployment4E287CA2a27c7beb658950a6c5fc97b90a1c9fdf"
+     "Ref": "KeepCapsuleApiDeployment4E287CA2aa267b0ac7254ce9880bf4baca00676c"
     },
     "RestApiId": {
      "Ref": "KeepCapsuleApi4C33AC9E"
@@ -778,6 +942,49 @@
     "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/register/POST/Resource"
    }
   },
+  "KeepCapsuleApiregisterOPTIONS2857CCB4": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "KeepCapsuleApiregisterBB57C508"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/register/OPTIONS/Resource"
+   }
+  },
   "KeepCapsuleApiloginA09757FE": {
    "Type": "AWS::ApiGateway::Resource",
    "Properties": {
@@ -923,25 +1130,7 @@
     "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/login/POST/Resource"
    }
   },
-  "KeepCapsuleApiupload367D22CB": {
-   "Type": "AWS::ApiGateway::Resource",
-   "Properties": {
-    "ParentId": {
-     "Fn::GetAtt": [
-      "KeepCapsuleApi4C33AC9E",
-      "RootResourceId"
-     ]
-    },
-    "PathPart": "upload",
-    "RestApiId": {
-     "Ref": "KeepCapsuleApi4C33AC9E"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/upload/Resource"
-   }
-  },
-  "KeepCapsuleApiuploadOPTIONS0F24FE92": {
+  "KeepCapsuleApiloginOPTIONS38E0F8B7": {
    "Type": "AWS::ApiGateway::Method",
    "Properties": {
     "AuthorizationType": "NONE",
@@ -974,14 +1163,32 @@
      }
     ],
     "ResourceId": {
-     "Ref": "KeepCapsuleApiupload367D22CB"
+     "Ref": "KeepCapsuleApiloginA09757FE"
     },
     "RestApiId": {
      "Ref": "KeepCapsuleApi4C33AC9E"
     }
    },
    "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/upload/OPTIONS/Resource"
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/login/OPTIONS/Resource"
+   }
+  },
+  "KeepCapsuleApiupload367D22CB": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "KeepCapsuleApi4C33AC9E",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "upload",
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/upload/Resource"
    }
   },
   "KeepCapsuleApiuploadPOSTApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25POSTupload9A4FCD5F": {
@@ -1100,15 +1307,6 @@
       ]
      }
     },
-    "MethodResponses": [
-     {
-      "ResponseParameters": {
-       "method.response.header.Access-Control-Allow-Origin": true,
-       "method.response.header.Access-Control-Allow-Headers": true
-      },
-      "StatusCode": "200"
-     }
-    ],
     "ResourceId": {
      "Ref": "KeepCapsuleApiupload367D22CB"
     },
@@ -1120,25 +1318,7 @@
     "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/upload/POST/Resource"
    }
   },
-  "KeepCapsuleApifiles3B28B6C9": {
-   "Type": "AWS::ApiGateway::Resource",
-   "Properties": {
-    "ParentId": {
-     "Fn::GetAtt": [
-      "KeepCapsuleApi4C33AC9E",
-      "RootResourceId"
-     ]
-    },
-    "PathPart": "files",
-    "RestApiId": {
-     "Ref": "KeepCapsuleApi4C33AC9E"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/Resource"
-   }
-  },
-  "KeepCapsuleApifilesOPTIONS5F75576A": {
+  "KeepCapsuleApiuploadOPTIONS0F24FE92": {
    "Type": "AWS::ApiGateway::Method",
    "Properties": {
     "AuthorizationType": "NONE",
@@ -1148,7 +1328,7 @@
       {
        "ResponseParameters": {
         "method.response.header.Access-Control-Allow-Headers": "'*'",
-        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,DELETE'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
         "method.response.header.Access-Control-Allow-Origin": "'*'"
        },
        "StatusCode": "200"
@@ -1171,14 +1351,32 @@
      }
     ],
     "ResourceId": {
-     "Ref": "KeepCapsuleApifiles3B28B6C9"
+     "Ref": "KeepCapsuleApiupload367D22CB"
     },
     "RestApiId": {
      "Ref": "KeepCapsuleApi4C33AC9E"
     }
    },
    "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/OPTIONS/Resource"
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/upload/OPTIONS/Resource"
+   }
+  },
+  "KeepCapsuleApifiles3B28B6C9": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "KeepCapsuleApi4C33AC9E",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "files",
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/Resource"
    }
   },
   "KeepCapsuleApifilesGETApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25GETfiles1E27A11E": {
@@ -1297,15 +1495,6 @@
       ]
      }
     },
-    "MethodResponses": [
-     {
-      "ResponseParameters": {
-       "method.response.header.Access-Control-Allow-Origin": true,
-       "method.response.header.Access-Control-Allow-Headers": true
-      },
-      "StatusCode": "200"
-     }
-    ],
     "ResourceId": {
      "Ref": "KeepCapsuleApifiles3B28B6C9"
     },
@@ -1433,11 +1622,45 @@
       ]
      }
     },
+    "ResourceId": {
+     "Ref": "KeepCapsuleApifiles3B28B6C9"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/DELETE/Resource"
+   }
+  },
+  "KeepCapsuleApifilesOPTIONS5F75576A": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,DELETE'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
     "MethodResponses": [
      {
       "ResponseParameters": {
-       "method.response.header.Access-Control-Allow-Origin": true,
-       "method.response.header.Access-Control-Allow-Headers": true
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
       },
       "StatusCode": "200"
      }
@@ -1450,7 +1673,383 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/DELETE/Resource"
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/OPTIONS/Resource"
+   }
+  },
+  "KeepCapsuleApiusage49ABA00E": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "KeepCapsuleApi4C33AC9E",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "usage",
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/usage/Resource"
+   }
+  },
+  "KeepCapsuleApiusageGETApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25GETusageBB6CC7E7": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getUserStorageFunction6A82096B",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/",
+       {
+        "Ref": "KeepCapsuleApiDeploymentStageprodB4D89F5E"
+       },
+       "/GET/usage"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/usage/GET/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.GET..usage"
+   }
+  },
+  "KeepCapsuleApiusageGETApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25GETusageBF5B84B8": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getUserStorageFunction6A82096B",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/test-invoke-stage/GET/usage"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/usage/GET/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.GET..usage"
+   }
+  },
+  "KeepCapsuleApiusageGET844C9BA8": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "getUserStorageFunction6A82096B",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "KeepCapsuleApiusage49ABA00E"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/usage/GET/Resource"
+   }
+  },
+  "KeepCapsuleApiusageOPTIONS4278A38C": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "KeepCapsuleApiusage49ABA00E"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/usage/OPTIONS/Resource"
+   }
+  },
+  "KeepCapsuleApimockusageFAAA6340": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "KeepCapsuleApi4C33AC9E",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "mock-usage",
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/mock-usage/Resource"
+   }
+  },
+  "KeepCapsuleApimockusageGETApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25GETmockusage29156D8E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "mockStorageUsageFunction3985941F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/",
+       {
+        "Ref": "KeepCapsuleApiDeploymentStageprodB4D89F5E"
+       },
+       "/GET/mock-usage"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/mock-usage/GET/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.GET..mock-usage"
+   }
+  },
+  "KeepCapsuleApimockusageGETApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25GETmockusage2E38F051": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "mockStorageUsageFunction3985941F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/test-invoke-stage/GET/mock-usage"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/mock-usage/GET/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.GET..mock-usage"
+   }
+  },
+  "KeepCapsuleApimockusageGET299568D7": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "mockStorageUsageFunction3985941F",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "KeepCapsuleApimockusageFAAA6340"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/mock-usage/GET/Resource"
+   }
+  },
+  "KeepCapsuleApimockusageOPTIONS6D5FD3CC": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "KeepCapsuleApimockusageFAAA6340"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/mock-usage/OPTIONS/Resource"
    }
   },
   "CDKMetadata": {

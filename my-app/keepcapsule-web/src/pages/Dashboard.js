@@ -4,6 +4,9 @@ import { compressAndUploadFile } from "../utils/compressAndUpload";
 const Dashboard = ({ user, onLogout }) => {
   const [files, setFiles] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [storageUsedMB, setStorageUsedMB] = useState(0);
+
+  const maxMB = 5120;
 
   useEffect(() => {
     const loadFiles = async () => {
@@ -17,7 +20,22 @@ const Dashboard = ({ user, onLogout }) => {
         console.error("Error loading files:", err.message);
       }
     };
+
+    const loadUsage = async () => {
+      try {
+        const res = await fetch(
+          `https://87kwlf9dhj.execute-api.eu-west-1.amazonaws.com/prod/usage?email=${user.email}`
+        );
+        const data = await res.json();
+        const usedMB = (data.usedBytes / (1024 * 1024)).toFixed(2);
+        setStorageUsedMB(usedMB);
+      } catch (err) {
+        console.error("Error loading storage usage:", err.message);
+      }
+    };
+
     loadFiles();
+    loadUsage();
   }, [user.email]);
 
   const handleFileChange = (e) => {
@@ -26,6 +44,11 @@ const Dashboard = ({ user, onLogout }) => {
 
   const handleUpload = async (e) => {
     e.preventDefault();
+    if (storageUsedMB > maxMB) {
+      alert("Storage limit exceeded. Please upgrade.");
+      return;
+    }
+
     for (const file of selectedFiles) {
       const uploaded = await compressAndUploadFile(file, user.email);
       if (uploaded.success) {
@@ -53,6 +76,32 @@ const Dashboard = ({ user, onLogout }) => {
   return (
     <div style={styles.container}>
       <h2>Welcome, {user.email}</h2>
+
+      {storageUsedMB > 4500 && (
+        <div style={styles.warning}>
+          {storageUsedMB > 5120 ? (
+            <>
+              <strong>Storage limit exceeded.</strong>
+              <br />
+              You’ve used {storageUsedMB}MB of 5120MB.
+              <br />
+              Please upgrade to continue uploading.
+            </>
+          ) : (
+            <>You’ve used {storageUsedMB}MB of 5120MB. You’re almost full!</>
+          )}
+          <br />
+          <button
+            onClick={() =>
+              (window.location.href =
+                "https://buy.stripe.com/fZeeWFd3ubxp0iQ3cc")
+            }
+            style={styles.upgrade}
+          >
+            Upgrade to 20GB
+          </button>
+        </div>
+      )}
 
       <form onSubmit={handleUpload} style={styles.uploadBox}>
         <input
@@ -101,14 +150,12 @@ const Dashboard = ({ user, onLogout }) => {
 
 const styles = {
   container: {
-    padding: "20px",
+    padding: 20,
     maxWidth: 900,
     margin: "0 auto",
     textAlign: "center",
   },
-  uploadBox: {
-    marginBottom: 30,
-  },
+  uploadBox: { marginBottom: 30 },
   uploadBtn: {
     marginTop: 10,
     padding: "10px 20px",
@@ -119,23 +166,40 @@ const styles = {
     cursor: "pointer",
     fontWeight: "bold",
   },
+  warning: {
+    backgroundColor: "#fffbe5",
+    border: "1px solid #ffcc00",
+    padding: 15,
+    borderRadius: 6,
+    marginBottom: 20,
+  },
+  upgrade: {
+    marginTop: 10,
+    padding: "8px 16px",
+    backgroundColor: "#28a745",
+    color: "white",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+    fontWeight: "bold",
+  },
   grid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
     gap: "20px",
-    marginBottom: "30px",
+    marginBottom: 30,
   },
   card: {
     backgroundColor: "#fff",
-    padding: "10px",
+    padding: 10,
     border: "1px solid #ccc",
-    borderRadius: "8px",
+    borderRadius: 8,
     textAlign: "center",
   },
   image: {
     width: "100%",
     height: "auto",
-    borderRadius: "5px",
+    borderRadius: 5,
   },
   deleteBtn: {
     marginTop: 10,
@@ -143,7 +207,7 @@ const styles = {
     color: "white",
     border: "none",
     padding: "5px 10px",
-    borderRadius: "5px",
+    borderRadius: 5,
     cursor: "pointer",
   },
   logout: {
