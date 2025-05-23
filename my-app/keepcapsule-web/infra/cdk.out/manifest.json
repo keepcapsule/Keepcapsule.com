@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/1d906847d54f555d5870bcc08d75cc1f8377f4db040965ceb2b63d1cfff754a5.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/4ef363567f3fc0e1521904cc37e155b0d1ac5ff9ff758c2c2295dd978e004105.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -148,6 +148,12 @@
             "data": "mockStorageUsageFunction3985941F"
           }
         ],
+        "/KeepCapsuleStack/getStorageBreakdownFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getStorageBreakdownFunctionD4BB6828"
+          }
+        ],
         "/KeepCapsuleStack/KeepCapsuleApi/Resource": [
           {
             "type": "aws:cdk:logicalId",
@@ -169,7 +175,7 @@
         "/KeepCapsuleStack/KeepCapsuleApi/Deployment/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "KeepCapsuleApiDeployment4E287CA23d8ac530f8f4c4c4703311b7d716f6b5"
+            "data": "KeepCapsuleApiDeployment4E287CA230ad47f177ef0485cfa680bc25bf6f4c"
           }
         ],
         "/KeepCapsuleStack/KeepCapsuleApi/DeploymentStage.prod/Resource": [
@@ -410,6 +416,36 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "KeepCapsuleApimockusageOPTIONS6D5FD3CC"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/breakdown/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApibreakdown7AE0CF49"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/breakdown/GET/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.GET..breakdown": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApibreakdownGETApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25GETbreakdown4FB907D5"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/breakdown/GET/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.GET..breakdown": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApibreakdownGETApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25GETbreakdownB0B52566"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/breakdown/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApibreakdownGETBDD924BB"
+          }
+        ],
+        "/KeepCapsuleStack/KeepCapsuleApi/Default/breakdown/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "KeepCapsuleApibreakdownOPTIONSCA512D51"
           }
         ],
         "/KeepCapsuleStack/CDKMetadata/Default": [

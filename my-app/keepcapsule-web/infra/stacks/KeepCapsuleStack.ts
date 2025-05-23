@@ -97,6 +97,12 @@ export class KeepCapsuleStack extends Stack {
       fileBucket,
       fileMetadataTable
     );
+    const getBreakdown = this.createFunction(
+      "getStorageBreakdown",
+      lambdaRole,
+      fileBucket,
+      fileMetadataTable
+    );
 
     const api = new apigateway.RestApi(this, "KeepCapsuleApi", {
       restApiName: "KeepCapsule Service",
@@ -163,6 +169,10 @@ export class KeepCapsuleStack extends Stack {
     const mock = api.root.addResource("mock-usage");
     mock.addMethod("GET", new apigateway.LambdaIntegration(mockUsage));
     addCorsOptions(mock, "GET");
+
+    const breakdown = api.root.addResource("breakdown");
+    breakdown.addMethod("GET", new apigateway.LambdaIntegration(getBreakdown));
+    addCorsOptions(breakdown, "GET");
   }
 
   private createFunction(

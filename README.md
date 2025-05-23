@@ -52,3 +52,15 @@ npx cdk deploy
 1. Go to frontend ---- cd keepcapsule-web
 2. Deploy frontend to GitHub Pages ---- npm run deploy
 3. Deploy backend to AWS (if changed) ---- cd infra && cdk deploy
+
+<!-- Rebuild frontend: -->
+
+cd keepcapsule-web
+npm install
+npm run build
+npm run deploy
+
+<!-- Redeploy backend: -->
+
+cd infra
+npx cdk deploy

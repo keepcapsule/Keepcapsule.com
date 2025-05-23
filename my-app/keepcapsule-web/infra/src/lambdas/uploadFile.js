@@ -1,6 +1,6 @@
+// uploadFile.js
 const AWS = require("aws-sdk");
 const Busboy = require("busboy");
-
 const s3 = new AWS.S3();
 const dynamo = new AWS.DynamoDB.DocumentClient();
 
@@ -9,62 +9,33 @@ exports.handler = async (event) => {
   const tableName = process.env.METADATA_TABLE;
 
   return new Promise((resolve, reject) => {
-    const busboy = new Busboy({
-      headers: event.headers,
-    });
+    const busboy = new Busboy({ headers: event.headers });
 
     let uploadEmail = "";
-    let uploadedFilename = "";
+    let originalFilename = "";
     let fileBuffer = Buffer.from([]);
     let contentType = "";
+    let title = "";
 
     busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
-      uploadedFilename = filename;
+      originalFilename = filename;
       contentType = mimetype;
-
       file.on("data", (data) => {
         fileBuffer = Buffer.concat([fileBuffer, data]);
       });
     });
 
     busboy.on("field", (fieldname, value) => {
-      if (fieldname === "email") {
-        uploadEmail = value;
-      }
+      if (fieldname === "email") uploadEmail = value;
+      if (fieldname === "title") title = value;
     });
 
     busboy.on("finish", async () => {
       try {
-        // 1. Get current user usage
-        const existing = await dynamo
-          .query({
-            TableName: tableName,
-            KeyConditionExpression: "email = :e",
-            ExpressionAttributeValues: {
-              ":e": uploadEmail,
-            },
-          })
-          .promise();
+        const timestamp = Date.now();
+        const uniqueFilename = `${timestamp}-${originalFilename}`;
+        const key = `${uploadEmail}/${uniqueFilename}`;
 
-        const totalUsed = existing.Items.reduce((sum, f) => sum + f.size, 0);
-        const maxAllowed = 5 * 1024 * 1024 * 1024; // 5GB
-
-        if (totalUsed + fileBuffer.length > maxAllowed) {
-          return resolve({
-            statusCode: 403,
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Headers": "*",
-            },
-            body: JSON.stringify({
-              success: false,
-              message: "Storage limit exceeded. Upgrade required.",
-            }),
-          });
-        }
-
-        // 2. Upload to S3
-        const key = `${uploadEmail}/${uploadedFilename}`;
         await s3
           .putObject({
             Bucket: bucketName,
@@ -74,15 +45,18 @@ exports.handler = async (event) => {
           })
           .promise();
 
-        // 3. Record metadata
+        const type = contentType.startsWith("image/") ? "photo" : "document";
+
         await dynamo
           .put({
             TableName: tableName,
             Item: {
               email: uploadEmail,
-              filename: uploadedFilename,
+              filename: uniqueFilename,
               size: fileBuffer.length,
               timestamp: new Date().toISOString(),
+              type,
+              title: title || originalFilename,
             },
           })
           .promise();
@@ -95,11 +69,11 @@ exports.handler = async (event) => {
           },
           body: JSON.stringify({
             success: true,
-            filename: uploadedFilename,
+            filename: uniqueFilename,
           }),
         });
-      } catch (error) {
-        console.error("Upload failed:", error);
+      } catch (err) {
+        console.error("Upload error:", err);
         resolve({
           statusCode: 500,
           headers: {
@@ -108,7 +82,7 @@ exports.handler = async (event) => {
           },
           body: JSON.stringify({
             success: false,
-            message: error.message,
+            message: err.message,
           }),
         });
       }
