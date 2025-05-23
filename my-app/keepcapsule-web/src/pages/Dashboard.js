@@ -73,6 +73,15 @@ const Dashboard = ({ user, onLogout }) => {
     }
   };
 
+  const handleResetUsage = async () => {
+    const res = await fetch(
+      `https://87kwlf9dhj.execute-api.eu-west-1.amazonaws.com/prod/reset-usage?email=${user.email}`
+    );
+    const data = await res.json();
+    alert(data.message || "Reset done");
+    window.location.reload();
+  };
+
   return (
     <div style={styles.container}>
       <h2>Welcome, {user.email}</h2>
@@ -144,6 +153,12 @@ const Dashboard = ({ user, onLogout }) => {
       <button onClick={onLogout} style={styles.logout}>
         Logout
       </button>
+
+      {user.email === "admin@keepcapsule.com" && (
+        <button onClick={handleResetUsage} style={styles.reset}>
+          🧼 Reset Usage
+        </button>
+      )}
     </div>
   );
 };
@@ -215,6 +230,16 @@ const styles = {
     backgroundColor: "#2d89ef",
     color: "white",
     padding: "10px 20px",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+    fontWeight: "bold",
+  },
+  reset: {
+    marginTop: 10,
+    backgroundColor: "#cccccc",
+    color: "#333",
+    padding: "8px 16px",
     border: "none",
     borderRadius: "6px",
     cursor: "pointer",

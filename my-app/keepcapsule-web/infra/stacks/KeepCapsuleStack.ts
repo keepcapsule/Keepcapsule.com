@@ -85,6 +85,12 @@ export class KeepCapsuleStack extends Stack {
       fileBucket,
       fileMetadataTable
     );
+    const resetUsage = this.createFunction(
+      "resetUsage",
+      lambdaRole,
+      fileBucket,
+      fileMetadataTable
+    );
     const mockUsage = this.createFunction(
       "mockStorageUsage",
       lambdaRole,
@@ -149,6 +155,10 @@ export class KeepCapsuleStack extends Stack {
     const usage = api.root.addResource("usage");
     usage.addMethod("GET", new apigateway.LambdaIntegration(getUserStorage));
     addCorsOptions(usage, "GET");
+
+    const reset = api.root.addResource("reset-usage");
+    reset.addMethod("GET", new apigateway.LambdaIntegration(resetUsage));
+    addCorsOptions(reset, "GET");
 
     const mock = api.root.addResource("mock-usage");
     mock.addMethod("GET", new apigateway.LambdaIntegration(mockUsage));
