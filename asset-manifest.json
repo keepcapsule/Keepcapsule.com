@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/static/css/main.e18627ae.css",
-    "main.js": "/static/js/main.4d83f309.js",
+    "main.js": "/static/js/main.98422a52.js",
     "static/js/641.764d5f6b.chunk.js": "/static/js/641.764d5f6b.chunk.js",
     "static/media/old_photo.jpg": "/static/media/old_photo.bf478cc7765a64dcdc1c.jpg",
     "static/media/KeepCapsuleLogo.png": "/static/media/KeepCapsuleLogo.284c789242d69ee1847d.png",
     "index.html": "/index.html",
     "main.e18627ae.css.map": "/static/css/main.e18627ae.css.map",
-    "main.4d83f309.js.map": "/static/js/main.4d83f309.js.map",
+    "main.98422a52.js.map": "/static/js/main.98422a52.js.map",
     "641.764d5f6b.chunk.js.map": "/static/js/641.764d5f6b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e18627ae.css",
-    "static/js/main.4d83f309.js"
+    "static/js/main.98422a52.js"
   ]
 }
