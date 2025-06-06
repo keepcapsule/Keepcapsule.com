@@ -7,7 +7,7 @@ const SetPassword = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const sessionId = query.get("session_id");
-  const email = query.get("email");
+  const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
   const [customerId, setCustomerId] = useState("");
@@ -20,7 +20,9 @@ const SetPassword = () => {
           `https://87kwlf9dhj.execute-api.eu-west-1.amazonaws.com/prod/stripe-session/${sessionId}`
         );
         const data = await res.json();
-        setCustomerId(data.customer); // Stripe customer ID
+        if (!data.customerId || !data.email) throw new Error("Missing fields");
+        setCustomerId(data.customerId);
+        setEmail(data.email);
       } catch (err) {
         console.error("Failed to fetch Stripe session:", err);
         setError("Unable to verify payment session.");
