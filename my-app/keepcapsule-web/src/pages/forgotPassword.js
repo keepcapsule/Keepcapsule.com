@@ -3,40 +3,41 @@ import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
-  const [customerId, setCustomerId] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    // Simulate a lookup (we assume you somehow map customerId to email)
-    for (let key in localStorage) {
-      if (key.startsWith("user_")) {
-        const user = JSON.parse(localStorage.getItem(key));
-        if (user.email === email) {
-          const id = key.replace("user_", "");
-          setCustomerId(id);
-
-          // Simulate sending a reset link
-          alert(`Reset link sent! (Simulated)\nClick OK to proceed to reset.`);
-
-          // Simulate redirecting to the reset-password page
-          navigate(
-            `/reset-password?customerId=${id}&email=${encodeURIComponent(
-              email
-            )}`
-          );
-          return;
+    try {
+      const res = await fetch(
+        "https://87kwlf9dhj.execute-api.eu-west-1.amazonaws.com/prod/request-password-reset",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
         }
-      }
-    }
+      );
 
-    alert("Email not found.");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Something went wrong");
+
+      setSuccess(true);
+      setTimeout(() => {
+        navigate(
+          `/reset-password?customerId=${data.customerId}&token=${data.token}&email=${email}`
+        );
+      }, 2000);
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
     <div style={{ padding: "40px" }}>
-      <h2>Forgot Password?</h2>
+      <h2>Forgot Password</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -51,6 +52,10 @@ const ForgotPassword = () => {
           Send Reset Link
         </button>
       </form>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {success && (
+        <p style={{ color: "green" }}>Reset link sent! Redirecting...</p>
+      )}
     </div>
   );
 };

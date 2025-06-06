@@ -1,96 +1,96 @@
-// uploadFile.js
 const AWS = require("aws-sdk");
-const Busboy = require("busboy");
 const s3 = new AWS.S3();
-const dynamo = new AWS.DynamoDB.DocumentClient();
+const dynamodb = new AWS.DynamoDB.DocumentClient();
+const Busboy = require("busboy");
+
+const BUCKET_NAME = process.env.BUCKET_NAME;
+const TABLE_NAME = process.env.TABLE_NAME;
 
 exports.handler = async (event) => {
-  const bucketName = process.env.BUCKET_NAME;
-  const tableName = process.env.METADATA_TABLE;
+  if (event.httpMethod !== "POST") {
+    return {
+      statusCode: 405,
+      headers: corsHeaders(),
+      body: JSON.stringify({ message: "Method Not Allowed" }),
+    };
+  }
 
+  const busboy = Busboy({ headers: event.headers });
   return new Promise((resolve, reject) => {
-    const busboy = new Busboy({ headers: event.headers });
-
-    let uploadEmail = "";
-    let originalFilename = "";
-    let fileBuffer = Buffer.from([]);
-    let contentType = "";
-    let title = "";
+    let email = "",
+      fileBuffer = Buffer.from([]),
+      fileName = "",
+      fileMime = "",
+      fileType = "";
 
     busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
-      originalFilename = filename;
-      contentType = mimetype;
+      fileName = filename;
+      fileMime = mimetype;
       file.on("data", (data) => {
         fileBuffer = Buffer.concat([fileBuffer, data]);
       });
     });
 
     busboy.on("field", (fieldname, value) => {
-      if (fieldname === "email") uploadEmail = value;
-      if (fieldname === "title") title = value;
+      if (fieldname === "email") email = value;
+      if (fieldname === "type") fileType = value;
     });
 
     busboy.on("finish", async () => {
       try {
-        const timestamp = Date.now();
-        const uniqueFilename = `${timestamp}-${originalFilename}`;
-        const key = `${uploadEmail}/${uniqueFilename}`;
-
+        const key = `${email}/${Date.now()}-${fileName}`;
         await s3
           .putObject({
-            Bucket: bucketName,
+            Bucket: BUCKET_NAME,
             Key: key,
             Body: fileBuffer,
-            ContentType: contentType,
+            ContentType: fileMime,
           })
           .promise();
 
-        const type = contentType.startsWith("image/") ? "photo" : "document";
-
-        await dynamo
+        await dynamodb
           .put({
-            TableName: tableName,
+            TableName: TABLE_NAME,
             Item: {
-              email: uploadEmail,
-              filename: uniqueFilename,
-              size: fileBuffer.length,
-              timestamp: new Date().toISOString(),
-              type,
-              title: title || originalFilename,
+              id: key,
+              email,
+              fileName,
+              fileType,
+              uploadedAt: new Date().toISOString(),
             },
           })
           .promise();
 
         resolve({
           statusCode: 200,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "*",
-          },
-          body: JSON.stringify({
-            success: true,
-            filename: uniqueFilename,
-          }),
+          headers: corsHeaders(),
+          body: JSON.stringify({ message: "Upload successful", fileName }),
         });
       } catch (err) {
-        console.error("Upload error:", err);
-        resolve({
+        console.error(err);
+        reject({
           statusCode: 500,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "*",
-          },
+          headers: corsHeaders(),
           body: JSON.stringify({
-            success: false,
-            message: err.message,
+            message: "Upload failed",
+            error: err.message,
           }),
         });
       }
     });
 
-    busboy.write(
-      Buffer.from(event.body, event.isBase64Encoded ? "base64" : "binary")
+    const buffer = Buffer.from(
+      event.body,
+      event.isBase64Encoded ? "base64" : "utf8"
     );
-    busboy.end();
+    busboy.end(buffer);
   });
 };
+
+function corsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "*",
+    "Access-Control-Allow-Methods": "*",
+  };
+}

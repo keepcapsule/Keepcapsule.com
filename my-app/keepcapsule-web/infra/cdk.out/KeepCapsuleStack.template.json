@@ -147,9 +147,7 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-     },
+     "S3Bucket": "cdk-hnb659fds-assets-248189922191-eu-west-1",
      "S3Key": "faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6.zip"
     },
     "Timeout": 900,
@@ -161,15 +159,7 @@
       "Arn"
      ]
     },
-    "Runtime": {
-     "Fn::FindInMap": [
-      "LatestNodeRuntimeMap",
-      {
-       "Ref": "AWS::Region"
-      },
-      "value"
-     ]
-    },
+    "Runtime": "nodejs20.x",
     "Description": {
      "Fn::Join": [
       "",
@@ -230,9 +220,27 @@
      {
       "AttributeName": "customerId",
       "AttributeType": "S"
+     },
+     {
+      "AttributeName": "email",
+      "AttributeType": "S"
      }
     ],
     "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "email-index",
+      "KeySchema": [
+       {
+        "AttributeName": "email",
+        "KeyType": "HASH"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
     "KeySchema": [
      {
       "AttributeName": "customerId",
@@ -285,6 +293,11 @@
    "Properties": {
     "PolicyDocument": {
      "Statement": [
+      {
+       "Action": "ssm:GetParameter",
+       "Effect": "Allow",
+       "Resource": "arn:aws:ssm:eu-west-1:248189922191:parameter/keepcapsule/stripeSecretKey"
+      },
       {
        "Action": [
         "s3:GetObject*",
@@ -374,7 +387,18 @@
          ]
         },
         {
-         "Ref": "AWS::NoValue"
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "KeepCapsuleUsersTable9F2DED2F",
+             "Arn"
+            ]
+           },
+           "/index/*"
+          ]
+         ]
         }
        ]
       }
@@ -396,20 +420,21 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-     },
-     "S3Key": "b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-248189922191-eu-west-1",
+     "S3Key": "ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958.zip"
     },
     "Environment": {
      "Variables": {
       "BUCKET_NAME": {
        "Ref": "KeepCapsuleBucket68CB5041"
       },
-      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "USERS_TABLE": {
+       "Ref": "KeepCapsuleUsersTable9F2DED2F"
+      },
       "METADATA_TABLE": {
        "Ref": "KeepCapsuleFileMetadataD0D8409C"
-      }
+      },
+      "STRIPE_SECRET_KEY": "AQICAHiQ/a1QaffGi6tG6WXXFKHY0g+ZshgPRQ4e74Lthqcz1QEJ8XAXDXwZGbqjYpjViT1AAAAAzjCBywYJKoZIhvcNAQcGoIG9MIG6AgEAMIG0BgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDFvI6s95GUCJWjZGVgIBEICBhqnISVrNDBhumPoTqeah4bmwaX3r9nGFVTMMXyy+U1OgzgV/5yPQT8pbd/SLiX+3l8OCV9PUBm47+R7trJioKUijYW+STFk2GApdif/K04X9TWKJjNfpwMpIm1LUMv/feJwWF9xDheAipRvtg5NXwam5UUuvLG+KpQHUmWx5wiyzYq8/WGEH"
      }
     },
     "Handler": "registerUser.handler",
@@ -428,7 +453,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/registerUserFunction/Resource",
-    "aws:asset:path": "asset.b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7",
+    "aws:asset:path": "asset.ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -437,20 +462,21 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-     },
-     "S3Key": "b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-248189922191-eu-west-1",
+     "S3Key": "ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958.zip"
     },
     "Environment": {
      "Variables": {
       "BUCKET_NAME": {
        "Ref": "KeepCapsuleBucket68CB5041"
       },
-      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "USERS_TABLE": {
+       "Ref": "KeepCapsuleUsersTable9F2DED2F"
+      },
       "METADATA_TABLE": {
        "Ref": "KeepCapsuleFileMetadataD0D8409C"
-      }
+      },
+      "STRIPE_SECRET_KEY": "AQICAHiQ/a1QaffGi6tG6WXXFKHY0g+ZshgPRQ4e74Lthqcz1QEJ8XAXDXwZGbqjYpjViT1AAAAAzjCBywYJKoZIhvcNAQcGoIG9MIG6AgEAMIG0BgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDFvI6s95GUCJWjZGVgIBEICBhqnISVrNDBhumPoTqeah4bmwaX3r9nGFVTMMXyy+U1OgzgV/5yPQT8pbd/SLiX+3l8OCV9PUBm47+R7trJioKUijYW+STFk2GApdif/K04X9TWKJjNfpwMpIm1LUMv/feJwWF9xDheAipRvtg5NXwam5UUuvLG+KpQHUmWx5wiyzYq8/WGEH"
      }
     },
     "Handler": "loginUser.handler",
@@ -469,7 +495,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/loginUserFunction/Resource",
-    "aws:asset:path": "asset.b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7",
+    "aws:asset:path": "asset.ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -478,20 +504,21 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-     },
-     "S3Key": "b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-248189922191-eu-west-1",
+     "S3Key": "ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958.zip"
     },
     "Environment": {
      "Variables": {
       "BUCKET_NAME": {
        "Ref": "KeepCapsuleBucket68CB5041"
       },
-      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "USERS_TABLE": {
+       "Ref": "KeepCapsuleUsersTable9F2DED2F"
+      },
       "METADATA_TABLE": {
        "Ref": "KeepCapsuleFileMetadataD0D8409C"
-      }
+      },
+      "STRIPE_SECRET_KEY": "AQICAHiQ/a1QaffGi6tG6WXXFKHY0g+ZshgPRQ4e74Lthqcz1QEJ8XAXDXwZGbqjYpjViT1AAAAAzjCBywYJKoZIhvcNAQcGoIG9MIG6AgEAMIG0BgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDFvI6s95GUCJWjZGVgIBEICBhqnISVrNDBhumPoTqeah4bmwaX3r9nGFVTMMXyy+U1OgzgV/5yPQT8pbd/SLiX+3l8OCV9PUBm47+R7trJioKUijYW+STFk2GApdif/K04X9TWKJjNfpwMpIm1LUMv/feJwWF9xDheAipRvtg5NXwam5UUuvLG+KpQHUmWx5wiyzYq8/WGEH"
      }
     },
     "Handler": "uploadFile.handler",
@@ -510,7 +537,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/uploadFileFunction/Resource",
-    "aws:asset:path": "asset.b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7",
+    "aws:asset:path": "asset.ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -519,20 +546,21 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-     },
-     "S3Key": "b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-248189922191-eu-west-1",
+     "S3Key": "ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958.zip"
     },
     "Environment": {
      "Variables": {
       "BUCKET_NAME": {
        "Ref": "KeepCapsuleBucket68CB5041"
       },
-      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "USERS_TABLE": {
+       "Ref": "KeepCapsuleUsersTable9F2DED2F"
+      },
       "METADATA_TABLE": {
        "Ref": "KeepCapsuleFileMetadataD0D8409C"
-      }
+      },
+      "STRIPE_SECRET_KEY": "AQICAHiQ/a1QaffGi6tG6WXXFKHY0g+ZshgPRQ4e74Lthqcz1QEJ8XAXDXwZGbqjYpjViT1AAAAAzjCBywYJKoZIhvcNAQcGoIG9MIG6AgEAMIG0BgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDFvI6s95GUCJWjZGVgIBEICBhqnISVrNDBhumPoTqeah4bmwaX3r9nGFVTMMXyy+U1OgzgV/5yPQT8pbd/SLiX+3l8OCV9PUBm47+R7trJioKUijYW+STFk2GApdif/K04X9TWKJjNfpwMpIm1LUMv/feJwWF9xDheAipRvtg5NXwam5UUuvLG+KpQHUmWx5wiyzYq8/WGEH"
      }
     },
     "Handler": "getFiles.handler",
@@ -551,7 +579,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/getFilesFunction/Resource",
-    "aws:asset:path": "asset.b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7",
+    "aws:asset:path": "asset.ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -560,20 +588,21 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-     },
-     "S3Key": "b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-248189922191-eu-west-1",
+     "S3Key": "ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958.zip"
     },
     "Environment": {
      "Variables": {
       "BUCKET_NAME": {
        "Ref": "KeepCapsuleBucket68CB5041"
       },
-      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "USERS_TABLE": {
+       "Ref": "KeepCapsuleUsersTable9F2DED2F"
+      },
       "METADATA_TABLE": {
        "Ref": "KeepCapsuleFileMetadataD0D8409C"
-      }
+      },
+      "STRIPE_SECRET_KEY": "AQICAHiQ/a1QaffGi6tG6WXXFKHY0g+ZshgPRQ4e74Lthqcz1QEJ8XAXDXwZGbqjYpjViT1AAAAAzjCBywYJKoZIhvcNAQcGoIG9MIG6AgEAMIG0BgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDFvI6s95GUCJWjZGVgIBEICBhqnISVrNDBhumPoTqeah4bmwaX3r9nGFVTMMXyy+U1OgzgV/5yPQT8pbd/SLiX+3l8OCV9PUBm47+R7trJioKUijYW+STFk2GApdif/K04X9TWKJjNfpwMpIm1LUMv/feJwWF9xDheAipRvtg5NXwam5UUuvLG+KpQHUmWx5wiyzYq8/WGEH"
      }
     },
     "Handler": "deleteFile.handler",
@@ -592,7 +621,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/deleteFileFunction/Resource",
-    "aws:asset:path": "asset.b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7",
+    "aws:asset:path": "asset.ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -601,20 +630,21 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-     },
-     "S3Key": "b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-248189922191-eu-west-1",
+     "S3Key": "ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958.zip"
     },
     "Environment": {
      "Variables": {
       "BUCKET_NAME": {
        "Ref": "KeepCapsuleBucket68CB5041"
       },
-      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "USERS_TABLE": {
+       "Ref": "KeepCapsuleUsersTable9F2DED2F"
+      },
       "METADATA_TABLE": {
        "Ref": "KeepCapsuleFileMetadataD0D8409C"
-      }
+      },
+      "STRIPE_SECRET_KEY": "AQICAHiQ/a1QaffGi6tG6WXXFKHY0g+ZshgPRQ4e74Lthqcz1QEJ8XAXDXwZGbqjYpjViT1AAAAAzjCBywYJKoZIhvcNAQcGoIG9MIG6AgEAMIG0BgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDFvI6s95GUCJWjZGVgIBEICBhqnISVrNDBhumPoTqeah4bmwaX3r9nGFVTMMXyy+U1OgzgV/5yPQT8pbd/SLiX+3l8OCV9PUBm47+R7trJioKUijYW+STFk2GApdif/K04X9TWKJjNfpwMpIm1LUMv/feJwWF9xDheAipRvtg5NXwam5UUuvLG+KpQHUmWx5wiyzYq8/WGEH"
      }
     },
     "Handler": "getUserStorage.handler",
@@ -633,7 +663,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/getUserStorageFunction/Resource",
-    "aws:asset:path": "asset.b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7",
+    "aws:asset:path": "asset.ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -642,20 +672,21 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-     },
-     "S3Key": "b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-248189922191-eu-west-1",
+     "S3Key": "ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958.zip"
     },
     "Environment": {
      "Variables": {
       "BUCKET_NAME": {
        "Ref": "KeepCapsuleBucket68CB5041"
       },
-      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "USERS_TABLE": {
+       "Ref": "KeepCapsuleUsersTable9F2DED2F"
+      },
       "METADATA_TABLE": {
        "Ref": "KeepCapsuleFileMetadataD0D8409C"
-      }
+      },
+      "STRIPE_SECRET_KEY": "AQICAHiQ/a1QaffGi6tG6WXXFKHY0g+ZshgPRQ4e74Lthqcz1QEJ8XAXDXwZGbqjYpjViT1AAAAAzjCBywYJKoZIhvcNAQcGoIG9MIG6AgEAMIG0BgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDFvI6s95GUCJWjZGVgIBEICBhqnISVrNDBhumPoTqeah4bmwaX3r9nGFVTMMXyy+U1OgzgV/5yPQT8pbd/SLiX+3l8OCV9PUBm47+R7trJioKUijYW+STFk2GApdif/K04X9TWKJjNfpwMpIm1LUMv/feJwWF9xDheAipRvtg5NXwam5UUuvLG+KpQHUmWx5wiyzYq8/WGEH"
      }
     },
     "Handler": "resetUsage.handler",
@@ -674,7 +705,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/resetUsageFunction/Resource",
-    "aws:asset:path": "asset.b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7",
+    "aws:asset:path": "asset.ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -683,20 +714,21 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-     },
-     "S3Key": "b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-248189922191-eu-west-1",
+     "S3Key": "ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958.zip"
     },
     "Environment": {
      "Variables": {
       "BUCKET_NAME": {
        "Ref": "KeepCapsuleBucket68CB5041"
       },
-      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "USERS_TABLE": {
+       "Ref": "KeepCapsuleUsersTable9F2DED2F"
+      },
       "METADATA_TABLE": {
        "Ref": "KeepCapsuleFileMetadataD0D8409C"
-      }
+      },
+      "STRIPE_SECRET_KEY": "AQICAHiQ/a1QaffGi6tG6WXXFKHY0g+ZshgPRQ4e74Lthqcz1QEJ8XAXDXwZGbqjYpjViT1AAAAAzjCBywYJKoZIhvcNAQcGoIG9MIG6AgEAMIG0BgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDFvI6s95GUCJWjZGVgIBEICBhqnISVrNDBhumPoTqeah4bmwaX3r9nGFVTMMXyy+U1OgzgV/5yPQT8pbd/SLiX+3l8OCV9PUBm47+R7trJioKUijYW+STFk2GApdif/K04X9TWKJjNfpwMpIm1LUMv/feJwWF9xDheAipRvtg5NXwam5UUuvLG+KpQHUmWx5wiyzYq8/WGEH"
      }
     },
     "Handler": "mockStorageUsage.handler",
@@ -715,7 +747,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/mockStorageUsageFunction/Resource",
-    "aws:asset:path": "asset.b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7",
+    "aws:asset:path": "asset.ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -724,20 +756,21 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": {
-      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-     },
-     "S3Key": "b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-248189922191-eu-west-1",
+     "S3Key": "ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958.zip"
     },
     "Environment": {
      "Variables": {
       "BUCKET_NAME": {
        "Ref": "KeepCapsuleBucket68CB5041"
       },
-      "USERS_TABLE": "KeepCapsuleUsersTable",
+      "USERS_TABLE": {
+       "Ref": "KeepCapsuleUsersTable9F2DED2F"
+      },
       "METADATA_TABLE": {
        "Ref": "KeepCapsuleFileMetadataD0D8409C"
-      }
+      },
+      "STRIPE_SECRET_KEY": "AQICAHiQ/a1QaffGi6tG6WXXFKHY0g+ZshgPRQ4e74Lthqcz1QEJ8XAXDXwZGbqjYpjViT1AAAAAzjCBywYJKoZIhvcNAQcGoIG9MIG6AgEAMIG0BgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDFvI6s95GUCJWjZGVgIBEICBhqnISVrNDBhumPoTqeah4bmwaX3r9nGFVTMMXyy+U1OgzgV/5yPQT8pbd/SLiX+3l8OCV9PUBm47+R7trJioKUijYW+STFk2GApdif/K04X9TWKJjNfpwMpIm1LUMv/feJwWF9xDheAipRvtg5NXwam5UUuvLG+KpQHUmWx5wiyzYq8/WGEH"
      }
     },
     "Handler": "getStorageBreakdown.handler",
@@ -756,7 +789,175 @@
    ],
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/getStorageBreakdownFunction/Resource",
-    "aws:asset:path": "asset.b6aeb7df23b2540f74025c5c6e19e5eccd359198f1171fa973967d67f94c7dd7",
+    "aws:asset:path": "asset.ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "requestPasswordResetFunctionD46EF1B5": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-248189922191-eu-west-1",
+     "S3Key": "ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "BUCKET_NAME": {
+       "Ref": "KeepCapsuleBucket68CB5041"
+      },
+      "USERS_TABLE": {
+       "Ref": "KeepCapsuleUsersTable9F2DED2F"
+      },
+      "METADATA_TABLE": {
+       "Ref": "KeepCapsuleFileMetadataD0D8409C"
+      },
+      "STRIPE_SECRET_KEY": "AQICAHiQ/a1QaffGi6tG6WXXFKHY0g+ZshgPRQ4e74Lthqcz1QEJ8XAXDXwZGbqjYpjViT1AAAAAzjCBywYJKoZIhvcNAQcGoIG9MIG6AgEAMIG0BgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDFvI6s95GUCJWjZGVgIBEICBhqnISVrNDBhumPoTqeah4bmwaX3r9nGFVTMMXyy+U1OgzgV/5yPQT8pbd/SLiX+3l8OCV9PUBm47+R7trJioKUijYW+STFk2GApdif/K04X9TWKJjNfpwMpIm1LUMv/feJwWF9xDheAipRvtg5NXwam5UUuvLG+KpQHUmWx5wiyzYq8/WGEH"
+     }
+    },
+    "Handler": "requestPasswordReset.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "KeepCapsuleLambdaRole8ED28D2A",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "KeepCapsuleLambdaRoleDefaultPolicyF6FB76E2",
+    "KeepCapsuleLambdaRole8ED28D2A"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/requestPasswordResetFunction/Resource",
+    "aws:asset:path": "asset.ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "resetPasswordFunctionEBC52182": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-248189922191-eu-west-1",
+     "S3Key": "ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "BUCKET_NAME": {
+       "Ref": "KeepCapsuleBucket68CB5041"
+      },
+      "USERS_TABLE": {
+       "Ref": "KeepCapsuleUsersTable9F2DED2F"
+      },
+      "METADATA_TABLE": {
+       "Ref": "KeepCapsuleFileMetadataD0D8409C"
+      },
+      "STRIPE_SECRET_KEY": "AQICAHiQ/a1QaffGi6tG6WXXFKHY0g+ZshgPRQ4e74Lthqcz1QEJ8XAXDXwZGbqjYpjViT1AAAAAzjCBywYJKoZIhvcNAQcGoIG9MIG6AgEAMIG0BgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDFvI6s95GUCJWjZGVgIBEICBhqnISVrNDBhumPoTqeah4bmwaX3r9nGFVTMMXyy+U1OgzgV/5yPQT8pbd/SLiX+3l8OCV9PUBm47+R7trJioKUijYW+STFk2GApdif/K04X9TWKJjNfpwMpIm1LUMv/feJwWF9xDheAipRvtg5NXwam5UUuvLG+KpQHUmWx5wiyzYq8/WGEH"
+     }
+    },
+    "Handler": "resetPassword.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "KeepCapsuleLambdaRole8ED28D2A",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "KeepCapsuleLambdaRoleDefaultPolicyF6FB76E2",
+    "KeepCapsuleLambdaRole8ED28D2A"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/resetPasswordFunction/Resource",
+    "aws:asset:path": "asset.ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "createCheckoutSessionFunction32EC871E": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-248189922191-eu-west-1",
+     "S3Key": "ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "BUCKET_NAME": {
+       "Ref": "KeepCapsuleBucket68CB5041"
+      },
+      "USERS_TABLE": {
+       "Ref": "KeepCapsuleUsersTable9F2DED2F"
+      },
+      "METADATA_TABLE": {
+       "Ref": "KeepCapsuleFileMetadataD0D8409C"
+      },
+      "STRIPE_SECRET_KEY": "AQICAHiQ/a1QaffGi6tG6WXXFKHY0g+ZshgPRQ4e74Lthqcz1QEJ8XAXDXwZGbqjYpjViT1AAAAAzjCBywYJKoZIhvcNAQcGoIG9MIG6AgEAMIG0BgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDFvI6s95GUCJWjZGVgIBEICBhqnISVrNDBhumPoTqeah4bmwaX3r9nGFVTMMXyy+U1OgzgV/5yPQT8pbd/SLiX+3l8OCV9PUBm47+R7trJioKUijYW+STFk2GApdif/K04X9TWKJjNfpwMpIm1LUMv/feJwWF9xDheAipRvtg5NXwam5UUuvLG+KpQHUmWx5wiyzYq8/WGEH"
+     }
+    },
+    "Handler": "createCheckoutSession.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "KeepCapsuleLambdaRole8ED28D2A",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "KeepCapsuleLambdaRoleDefaultPolicyF6FB76E2",
+    "KeepCapsuleLambdaRole8ED28D2A"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/createCheckoutSessionFunction/Resource",
+    "aws:asset:path": "asset.ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "getStripeSessionFunction67B5EEF1": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-248189922191-eu-west-1",
+     "S3Key": "ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "BUCKET_NAME": {
+       "Ref": "KeepCapsuleBucket68CB5041"
+      },
+      "USERS_TABLE": {
+       "Ref": "KeepCapsuleUsersTable9F2DED2F"
+      },
+      "METADATA_TABLE": {
+       "Ref": "KeepCapsuleFileMetadataD0D8409C"
+      },
+      "STRIPE_SECRET_KEY": "AQICAHiQ/a1QaffGi6tG6WXXFKHY0g+ZshgPRQ4e74Lthqcz1QEJ8XAXDXwZGbqjYpjViT1AAAAAzjCBywYJKoZIhvcNAQcGoIG9MIG6AgEAMIG0BgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDFvI6s95GUCJWjZGVgIBEICBhqnISVrNDBhumPoTqeah4bmwaX3r9nGFVTMMXyy+U1OgzgV/5yPQT8pbd/SLiX+3l8OCV9PUBm47+R7trJioKUijYW+STFk2GApdif/K04X9TWKJjNfpwMpIm1LUMv/feJwWF9xDheAipRvtg5NXwam5UUuvLG+KpQHUmWx5wiyzYq8/WGEH"
+     }
+    },
+    "Handler": "getStripeSession.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "KeepCapsuleLambdaRole8ED28D2A",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 10
+   },
+   "DependsOn": [
+    "KeepCapsuleLambdaRoleDefaultPolicyF6FB76E2",
+    "KeepCapsuleLambdaRole8ED28D2A"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/getStripeSessionFunction/Resource",
+    "aws:asset:path": "asset.ad71339e07b668414c7ff0cbd7e7dffeacffb979e354dc90b1fbd7d5b2971958",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
@@ -828,7 +1029,7 @@
     "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Account"
    }
   },
-  "KeepCapsuleApiDeployment4E287CA230ad47f177ef0485cfa680bc25bf6f4c": {
+  "KeepCapsuleApiDeployment4E287CA2fb4728ef0bbd8e3b36bb390e01f0d83a": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "Description": "Automatically created by the RestApi construct",
@@ -840,22 +1041,34 @@
     "KeepCapsuleApibreakdownGETBDD924BB",
     "KeepCapsuleApibreakdownOPTIONSCA512D51",
     "KeepCapsuleApibreakdown7AE0CF49",
+    "KeepCapsuleApicreatecheckoutsessionOPTIONS3728A960",
+    "KeepCapsuleApicreatecheckoutsessionPOST57668F23",
+    "KeepCapsuleApicreatecheckoutsessionDA9B77CE",
     "KeepCapsuleApifilesDELETE472E6597",
     "KeepCapsuleApifilesGET851E2711",
     "KeepCapsuleApifilesOPTIONS5F75576A",
     "KeepCapsuleApifiles3B28B6C9",
-    "KeepCapsuleApiloginOPTIONS38E0F8B7",
-    "KeepCapsuleApiloginPOST50D4BABB",
-    "KeepCapsuleApiloginA09757FE",
+    "KeepCapsuleApiloginv2OPTIONS39DAB677",
+    "KeepCapsuleApiloginv2POSTC909BA1A",
+    "KeepCapsuleApiloginv2BA40A070",
     "KeepCapsuleApimockusageGET299568D7",
     "KeepCapsuleApimockusageOPTIONS6D5FD3CC",
     "KeepCapsuleApimockusageFAAA6340",
-    "KeepCapsuleApiregisterOPTIONS2857CCB4",
-    "KeepCapsuleApiregisterPOST9CEEDC29",
-    "KeepCapsuleApiregisterBB57C508",
+    "KeepCapsuleApiregisterv2OPTIONS3FDC301E",
+    "KeepCapsuleApiregisterv2POSTFC6B37F5",
+    "KeepCapsuleApiregisterv26135A707",
+    "KeepCapsuleApirequestpasswordresetOPTIONSE902C3E2",
+    "KeepCapsuleApirequestpasswordresetPOST5D1F4F30",
+    "KeepCapsuleApirequestpasswordreset6202A6BB",
+    "KeepCapsuleApiresetpasswordOPTIONSF9624B39",
+    "KeepCapsuleApiresetpasswordPOST3894B62E",
+    "KeepCapsuleApiresetpasswordC842ED66",
     "KeepCapsuleApiresetusageGET358E6219",
     "KeepCapsuleApiresetusageOPTIONSC3297F2F",
     "KeepCapsuleApiresetusage57D443CE",
+    "KeepCapsuleApistripesessionsessionIdGET9144A038",
+    "KeepCapsuleApistripesessionsessionId3FA7697F",
+    "KeepCapsuleApistripesession2F269016",
     "KeepCapsuleApiuploadOPTIONS0F24FE92",
     "KeepCapsuleApiuploadPOST61E7A679",
     "KeepCapsuleApiupload367D22CB",
@@ -871,7 +1084,7 @@
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "DeploymentId": {
-     "Ref": "KeepCapsuleApiDeployment4E287CA230ad47f177ef0485cfa680bc25bf6f4c"
+     "Ref": "KeepCapsuleApiDeployment4E287CA2fb4728ef0bbd8e3b36bb390e01f0d83a"
     },
     "RestApiId": {
      "Ref": "KeepCapsuleApi4C33AC9E"
@@ -885,7 +1098,7 @@
     "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/DeploymentStage.prod/Resource"
    }
   },
-  "KeepCapsuleApiregisterBB57C508": {
+  "KeepCapsuleApiregisterv26135A707": {
    "Type": "AWS::ApiGateway::Resource",
    "Properties": {
     "ParentId": {
@@ -894,16 +1107,16 @@
       "RootResourceId"
      ]
     },
-    "PathPart": "register",
+    "PathPart": "register-v2",
     "RestApiId": {
      "Ref": "KeepCapsuleApi4C33AC9E"
     }
    },
    "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/register/Resource"
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/register-v2/Resource"
    }
   },
-  "KeepCapsuleApiregisterPOSTApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25POSTregisterB33EC13A": {
+  "KeepCapsuleApiregisterv2POSTApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25POSTregisterv28B9FFC5D": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -922,15 +1135,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
+       ":execute-api:eu-west-1:248189922191:",
        {
         "Ref": "KeepCapsuleApi4C33AC9E"
        },
@@ -938,16 +1143,16 @@
        {
         "Ref": "KeepCapsuleApiDeploymentStageprodB4D89F5E"
        },
-       "/POST/register"
+       "/POST/register-v2"
       ]
      ]
     }
    },
    "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/register/POST/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..register"
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/register-v2/POST/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..register-v2"
    }
   },
-  "KeepCapsuleApiregisterPOSTApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25POSTregister2E6505AD": {
+  "KeepCapsuleApiregisterv2POSTApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25POSTregisterv2387567D1": {
    "Type": "AWS::Lambda::Permission",
    "Properties": {
     "Action": "lambda:InvokeFunction",
@@ -966,35 +1171,41 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
+       ":execute-api:eu-west-1:248189922191:",
        {
         "Ref": "KeepCapsuleApi4C33AC9E"
        },
-       "/test-invoke-stage/POST/register"
+       "/test-invoke-stage/POST/register-v2"
       ]
      ]
     }
    },
    "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/register/POST/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..register"
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/register-v2/POST/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..register-v2"
    }
   },
-  "KeepCapsuleApiregisterPOST9CEEDC29": {
+  "KeepCapsuleApiregisterv2POSTFC6B37F5": {
    "Type": "AWS::ApiGateway::Method",
    "Properties": {
     "AuthorizationType": "NONE",
     "HttpMethod": "POST",
     "Integration": {
      "IntegrationHttpMethod": "POST",
-     "Type": "AWS_PROXY",
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "ResponseTemplates": {
+        "application/json": ""
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{\n              \"body\": \"$util.escapeJavaScript($input.body).replaceAll(\"\\'\",\"'\")\"\n            }"
+     },
+     "Type": "AWS",
      "Uri": {
       "Fn::Join": [
        "",
@@ -1003,11 +1214,7 @@
         {
          "Ref": "AWS::Partition"
         },
-        ":apigateway:",
-        {
-         "Ref": "AWS::Region"
-        },
-        ":lambda:path/2015-03-31/functions/",
+        ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
         {
          "Fn::GetAtt": [
           "registerUserFunction41AB88D8",
@@ -1019,18 +1226,26 @@
       ]
      }
     },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
     "ResourceId": {
-     "Ref": "KeepCapsuleApiregisterBB57C508"
+     "Ref": "KeepCapsuleApiregisterv26135A707"
     },
     "RestApiId": {
      "Ref": "KeepCapsuleApi4C33AC9E"
     }
    },
    "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/register/POST/Resource"
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/register-v2/POST/Resource"
    }
   },
-  "KeepCapsuleApiregisterOPTIONS2857CCB4": {
+  "KeepCapsuleApiregisterv2OPTIONS3FDC301E": {
    "Type": "AWS::ApiGateway::Method",
    "Properties": {
     "AuthorizationType": "NONE",
@@ -1063,202 +1278,14 @@
      }
     ],
     "ResourceId": {
-     "Ref": "KeepCapsuleApiregisterBB57C508"
+     "Ref": "KeepCapsuleApiregisterv26135A707"
     },
     "RestApiId": {
      "Ref": "KeepCapsuleApi4C33AC9E"
     }
    },
    "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/register/OPTIONS/Resource"
-   }
-  },
-  "KeepCapsuleApiloginA09757FE": {
-   "Type": "AWS::ApiGateway::Resource",
-   "Properties": {
-    "ParentId": {
-     "Fn::GetAtt": [
-      "KeepCapsuleApi4C33AC9E",
-      "RootResourceId"
-     ]
-    },
-    "PathPart": "login",
-    "RestApiId": {
-     "Ref": "KeepCapsuleApi4C33AC9E"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/login/Resource"
-   }
-  },
-  "KeepCapsuleApiloginPOSTApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25POSTlogin7A8F2249": {
-   "Type": "AWS::Lambda::Permission",
-   "Properties": {
-    "Action": "lambda:InvokeFunction",
-    "FunctionName": {
-     "Fn::GetAtt": [
-      "loginUserFunction1FA81047",
-      "Arn"
-     ]
-    },
-    "Principal": "apigateway.amazonaws.com",
-    "SourceArn": {
-     "Fn::Join": [
-      "",
-      [
-       "arn:",
-       {
-        "Ref": "AWS::Partition"
-       },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
-       {
-        "Ref": "KeepCapsuleApi4C33AC9E"
-       },
-       "/",
-       {
-        "Ref": "KeepCapsuleApiDeploymentStageprodB4D89F5E"
-       },
-       "/POST/login"
-      ]
-     ]
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/login/POST/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..login"
-   }
-  },
-  "KeepCapsuleApiloginPOSTApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25POSTloginF35903CB": {
-   "Type": "AWS::Lambda::Permission",
-   "Properties": {
-    "Action": "lambda:InvokeFunction",
-    "FunctionName": {
-     "Fn::GetAtt": [
-      "loginUserFunction1FA81047",
-      "Arn"
-     ]
-    },
-    "Principal": "apigateway.amazonaws.com",
-    "SourceArn": {
-     "Fn::Join": [
-      "",
-      [
-       "arn:",
-       {
-        "Ref": "AWS::Partition"
-       },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
-       {
-        "Ref": "KeepCapsuleApi4C33AC9E"
-       },
-       "/test-invoke-stage/POST/login"
-      ]
-     ]
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/login/POST/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..login"
-   }
-  },
-  "KeepCapsuleApiloginPOST50D4BABB": {
-   "Type": "AWS::ApiGateway::Method",
-   "Properties": {
-    "AuthorizationType": "NONE",
-    "HttpMethod": "POST",
-    "Integration": {
-     "IntegrationHttpMethod": "POST",
-     "Type": "AWS_PROXY",
-     "Uri": {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":apigateway:",
-        {
-         "Ref": "AWS::Region"
-        },
-        ":lambda:path/2015-03-31/functions/",
-        {
-         "Fn::GetAtt": [
-          "loginUserFunction1FA81047",
-          "Arn"
-         ]
-        },
-        "/invocations"
-       ]
-      ]
-     }
-    },
-    "ResourceId": {
-     "Ref": "KeepCapsuleApiloginA09757FE"
-    },
-    "RestApiId": {
-     "Ref": "KeepCapsuleApi4C33AC9E"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/login/POST/Resource"
-   }
-  },
-  "KeepCapsuleApiloginOPTIONS38E0F8B7": {
-   "Type": "AWS::ApiGateway::Method",
-   "Properties": {
-    "AuthorizationType": "NONE",
-    "HttpMethod": "OPTIONS",
-    "Integration": {
-     "IntegrationResponses": [
-      {
-       "ResponseParameters": {
-        "method.response.header.Access-Control-Allow-Headers": "'*'",
-        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
-        "method.response.header.Access-Control-Allow-Origin": "'*'"
-       },
-       "StatusCode": "200"
-      }
-     ],
-     "PassthroughBehavior": "NEVER",
-     "RequestTemplates": {
-      "application/json": "{\"statusCode\": 200}"
-     },
-     "Type": "MOCK"
-    },
-    "MethodResponses": [
-     {
-      "ResponseParameters": {
-       "method.response.header.Access-Control-Allow-Headers": true,
-       "method.response.header.Access-Control-Allow-Methods": true,
-       "method.response.header.Access-Control-Allow-Origin": true
-      },
-      "StatusCode": "200"
-     }
-    ],
-    "ResourceId": {
-     "Ref": "KeepCapsuleApiloginA09757FE"
-    },
-    "RestApiId": {
-     "Ref": "KeepCapsuleApi4C33AC9E"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/login/OPTIONS/Resource"
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/register-v2/OPTIONS/Resource"
    }
   },
   "KeepCapsuleApiupload367D22CB": {
@@ -1298,15 +1325,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
+       ":execute-api:eu-west-1:248189922191:",
        {
         "Ref": "KeepCapsuleApi4C33AC9E"
        },
@@ -1342,15 +1361,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
+       ":execute-api:eu-west-1:248189922191:",
        {
         "Ref": "KeepCapsuleApi4C33AC9E"
        },
@@ -1370,7 +1381,21 @@
     "HttpMethod": "POST",
     "Integration": {
      "IntegrationHttpMethod": "POST",
-     "Type": "AWS_PROXY",
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "ResponseTemplates": {
+        "application/json": ""
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{\n              \"body\": \"$util.escapeJavaScript($input.body).replaceAll(\"\\'\",\"'\")\"\n            }"
+     },
+     "Type": "AWS",
      "Uri": {
       "Fn::Join": [
        "",
@@ -1379,11 +1404,7 @@
         {
          "Ref": "AWS::Partition"
         },
-        ":apigateway:",
-        {
-         "Ref": "AWS::Region"
-        },
-        ":lambda:path/2015-03-31/functions/",
+        ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
         {
          "Fn::GetAtt": [
           "uploadFileFunction2DAC78E7",
@@ -1395,6 +1416,14 @@
       ]
      }
     },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
     "ResourceId": {
      "Ref": "KeepCapsuleApiupload367D22CB"
     },
@@ -1449,321 +1478,6 @@
     "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/upload/OPTIONS/Resource"
    }
   },
-  "KeepCapsuleApifiles3B28B6C9": {
-   "Type": "AWS::ApiGateway::Resource",
-   "Properties": {
-    "ParentId": {
-     "Fn::GetAtt": [
-      "KeepCapsuleApi4C33AC9E",
-      "RootResourceId"
-     ]
-    },
-    "PathPart": "files",
-    "RestApiId": {
-     "Ref": "KeepCapsuleApi4C33AC9E"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/Resource"
-   }
-  },
-  "KeepCapsuleApifilesGETApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25GETfiles1E27A11E": {
-   "Type": "AWS::Lambda::Permission",
-   "Properties": {
-    "Action": "lambda:InvokeFunction",
-    "FunctionName": {
-     "Fn::GetAtt": [
-      "getFilesFunction3E9EBCF2",
-      "Arn"
-     ]
-    },
-    "Principal": "apigateway.amazonaws.com",
-    "SourceArn": {
-     "Fn::Join": [
-      "",
-      [
-       "arn:",
-       {
-        "Ref": "AWS::Partition"
-       },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
-       {
-        "Ref": "KeepCapsuleApi4C33AC9E"
-       },
-       "/",
-       {
-        "Ref": "KeepCapsuleApiDeploymentStageprodB4D89F5E"
-       },
-       "/GET/files"
-      ]
-     ]
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/GET/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.GET..files"
-   }
-  },
-  "KeepCapsuleApifilesGETApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25GETfilesE1BE799D": {
-   "Type": "AWS::Lambda::Permission",
-   "Properties": {
-    "Action": "lambda:InvokeFunction",
-    "FunctionName": {
-     "Fn::GetAtt": [
-      "getFilesFunction3E9EBCF2",
-      "Arn"
-     ]
-    },
-    "Principal": "apigateway.amazonaws.com",
-    "SourceArn": {
-     "Fn::Join": [
-      "",
-      [
-       "arn:",
-       {
-        "Ref": "AWS::Partition"
-       },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
-       {
-        "Ref": "KeepCapsuleApi4C33AC9E"
-       },
-       "/test-invoke-stage/GET/files"
-      ]
-     ]
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/GET/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.GET..files"
-   }
-  },
-  "KeepCapsuleApifilesGET851E2711": {
-   "Type": "AWS::ApiGateway::Method",
-   "Properties": {
-    "AuthorizationType": "NONE",
-    "HttpMethod": "GET",
-    "Integration": {
-     "IntegrationHttpMethod": "POST",
-     "Type": "AWS_PROXY",
-     "Uri": {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":apigateway:",
-        {
-         "Ref": "AWS::Region"
-        },
-        ":lambda:path/2015-03-31/functions/",
-        {
-         "Fn::GetAtt": [
-          "getFilesFunction3E9EBCF2",
-          "Arn"
-         ]
-        },
-        "/invocations"
-       ]
-      ]
-     }
-    },
-    "ResourceId": {
-     "Ref": "KeepCapsuleApifiles3B28B6C9"
-    },
-    "RestApiId": {
-     "Ref": "KeepCapsuleApi4C33AC9E"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/GET/Resource"
-   }
-  },
-  "KeepCapsuleApifilesDELETEApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25DELETEfilesAD502608": {
-   "Type": "AWS::Lambda::Permission",
-   "Properties": {
-    "Action": "lambda:InvokeFunction",
-    "FunctionName": {
-     "Fn::GetAtt": [
-      "deleteFileFunction648E9D10",
-      "Arn"
-     ]
-    },
-    "Principal": "apigateway.amazonaws.com",
-    "SourceArn": {
-     "Fn::Join": [
-      "",
-      [
-       "arn:",
-       {
-        "Ref": "AWS::Partition"
-       },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
-       {
-        "Ref": "KeepCapsuleApi4C33AC9E"
-       },
-       "/",
-       {
-        "Ref": "KeepCapsuleApiDeploymentStageprodB4D89F5E"
-       },
-       "/DELETE/files"
-      ]
-     ]
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/DELETE/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.DELETE..files"
-   }
-  },
-  "KeepCapsuleApifilesDELETEApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25DELETEfiles9CEBD6F0": {
-   "Type": "AWS::Lambda::Permission",
-   "Properties": {
-    "Action": "lambda:InvokeFunction",
-    "FunctionName": {
-     "Fn::GetAtt": [
-      "deleteFileFunction648E9D10",
-      "Arn"
-     ]
-    },
-    "Principal": "apigateway.amazonaws.com",
-    "SourceArn": {
-     "Fn::Join": [
-      "",
-      [
-       "arn:",
-       {
-        "Ref": "AWS::Partition"
-       },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
-       {
-        "Ref": "KeepCapsuleApi4C33AC9E"
-       },
-       "/test-invoke-stage/DELETE/files"
-      ]
-     ]
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/DELETE/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.DELETE..files"
-   }
-  },
-  "KeepCapsuleApifilesDELETE472E6597": {
-   "Type": "AWS::ApiGateway::Method",
-   "Properties": {
-    "AuthorizationType": "NONE",
-    "HttpMethod": "DELETE",
-    "Integration": {
-     "IntegrationHttpMethod": "POST",
-     "Type": "AWS_PROXY",
-     "Uri": {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":apigateway:",
-        {
-         "Ref": "AWS::Region"
-        },
-        ":lambda:path/2015-03-31/functions/",
-        {
-         "Fn::GetAtt": [
-          "deleteFileFunction648E9D10",
-          "Arn"
-         ]
-        },
-        "/invocations"
-       ]
-      ]
-     }
-    },
-    "ResourceId": {
-     "Ref": "KeepCapsuleApifiles3B28B6C9"
-    },
-    "RestApiId": {
-     "Ref": "KeepCapsuleApi4C33AC9E"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/DELETE/Resource"
-   }
-  },
-  "KeepCapsuleApifilesOPTIONS5F75576A": {
-   "Type": "AWS::ApiGateway::Method",
-   "Properties": {
-    "AuthorizationType": "NONE",
-    "HttpMethod": "OPTIONS",
-    "Integration": {
-     "IntegrationResponses": [
-      {
-       "ResponseParameters": {
-        "method.response.header.Access-Control-Allow-Headers": "'*'",
-        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,DELETE'",
-        "method.response.header.Access-Control-Allow-Origin": "'*'"
-       },
-       "StatusCode": "200"
-      }
-     ],
-     "PassthroughBehavior": "NEVER",
-     "RequestTemplates": {
-      "application/json": "{\"statusCode\": 200}"
-     },
-     "Type": "MOCK"
-    },
-    "MethodResponses": [
-     {
-      "ResponseParameters": {
-       "method.response.header.Access-Control-Allow-Headers": true,
-       "method.response.header.Access-Control-Allow-Methods": true,
-       "method.response.header.Access-Control-Allow-Origin": true
-      },
-      "StatusCode": "200"
-     }
-    ],
-    "ResourceId": {
-     "Ref": "KeepCapsuleApifiles3B28B6C9"
-    },
-    "RestApiId": {
-     "Ref": "KeepCapsuleApi4C33AC9E"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/OPTIONS/Resource"
-   }
-  },
   "KeepCapsuleApiusage49ABA00E": {
    "Type": "AWS::ApiGateway::Resource",
    "Properties": {
@@ -1801,15 +1515,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
+       ":execute-api:eu-west-1:248189922191:",
        {
         "Ref": "KeepCapsuleApi4C33AC9E"
        },
@@ -1845,15 +1551,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
+       ":execute-api:eu-west-1:248189922191:",
        {
         "Ref": "KeepCapsuleApi4C33AC9E"
        },
@@ -1873,7 +1571,21 @@
     "HttpMethod": "GET",
     "Integration": {
      "IntegrationHttpMethod": "POST",
-     "Type": "AWS_PROXY",
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "ResponseTemplates": {
+        "application/json": ""
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{\n              \"body\": \"$util.escapeJavaScript($input.body).replaceAll(\"\\'\",\"'\")\"\n            }"
+     },
+     "Type": "AWS",
      "Uri": {
       "Fn::Join": [
        "",
@@ -1882,11 +1594,7 @@
         {
          "Ref": "AWS::Partition"
         },
-        ":apigateway:",
-        {
-         "Ref": "AWS::Region"
-        },
-        ":lambda:path/2015-03-31/functions/",
+        ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
         {
          "Fn::GetAtt": [
           "getUserStorageFunction6A82096B",
@@ -1898,6 +1606,14 @@
       ]
      }
     },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
     "ResourceId": {
      "Ref": "KeepCapsuleApiusage49ABA00E"
     },
@@ -1989,15 +1705,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
+       ":execute-api:eu-west-1:248189922191:",
        {
         "Ref": "KeepCapsuleApi4C33AC9E"
        },
@@ -2033,15 +1741,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
+       ":execute-api:eu-west-1:248189922191:",
        {
         "Ref": "KeepCapsuleApi4C33AC9E"
        },
@@ -2061,7 +1761,21 @@
     "HttpMethod": "GET",
     "Integration": {
      "IntegrationHttpMethod": "POST",
-     "Type": "AWS_PROXY",
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "ResponseTemplates": {
+        "application/json": ""
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{\n              \"body\": \"$util.escapeJavaScript($input.body).replaceAll(\"\\'\",\"'\")\"\n            }"
+     },
+     "Type": "AWS",
      "Uri": {
       "Fn::Join": [
        "",
@@ -2070,11 +1784,7 @@
         {
          "Ref": "AWS::Partition"
         },
-        ":apigateway:",
-        {
-         "Ref": "AWS::Region"
-        },
-        ":lambda:path/2015-03-31/functions/",
+        ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
         {
          "Fn::GetAtt": [
           "resetUsageFunction26F6C77F",
@@ -2086,6 +1796,14 @@
       ]
      }
     },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
     "ResourceId": {
      "Ref": "KeepCapsuleApiresetusage57D443CE"
     },
@@ -2177,15 +1895,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
+       ":execute-api:eu-west-1:248189922191:",
        {
         "Ref": "KeepCapsuleApi4C33AC9E"
        },
@@ -2221,15 +1931,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
+       ":execute-api:eu-west-1:248189922191:",
        {
         "Ref": "KeepCapsuleApi4C33AC9E"
        },
@@ -2249,7 +1951,21 @@
     "HttpMethod": "GET",
     "Integration": {
      "IntegrationHttpMethod": "POST",
-     "Type": "AWS_PROXY",
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "ResponseTemplates": {
+        "application/json": ""
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{\n              \"body\": \"$util.escapeJavaScript($input.body).replaceAll(\"\\'\",\"'\")\"\n            }"
+     },
+     "Type": "AWS",
      "Uri": {
       "Fn::Join": [
        "",
@@ -2258,11 +1974,7 @@
         {
          "Ref": "AWS::Partition"
         },
-        ":apigateway:",
-        {
-         "Ref": "AWS::Region"
-        },
-        ":lambda:path/2015-03-31/functions/",
+        ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
         {
          "Fn::GetAtt": [
           "mockStorageUsageFunction3985941F",
@@ -2274,6 +1986,14 @@
       ]
      }
     },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
     "ResourceId": {
      "Ref": "KeepCapsuleApimockusageFAAA6340"
     },
@@ -2365,15 +2085,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
+       ":execute-api:eu-west-1:248189922191:",
        {
         "Ref": "KeepCapsuleApi4C33AC9E"
        },
@@ -2409,15 +2121,7 @@
        {
         "Ref": "AWS::Partition"
        },
-       ":execute-api:",
-       {
-        "Ref": "AWS::Region"
-       },
-       ":",
-       {
-        "Ref": "AWS::AccountId"
-       },
-       ":",
+       ":execute-api:eu-west-1:248189922191:",
        {
         "Ref": "KeepCapsuleApi4C33AC9E"
        },
@@ -2437,7 +2141,21 @@
     "HttpMethod": "GET",
     "Integration": {
      "IntegrationHttpMethod": "POST",
-     "Type": "AWS_PROXY",
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "ResponseTemplates": {
+        "application/json": ""
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{\n              \"body\": \"$util.escapeJavaScript($input.body).replaceAll(\"\\'\",\"'\")\"\n            }"
+     },
+     "Type": "AWS",
      "Uri": {
       "Fn::Join": [
        "",
@@ -2446,11 +2164,7 @@
         {
          "Ref": "AWS::Partition"
         },
-        ":apigateway:",
-        {
-         "Ref": "AWS::Region"
-        },
-        ":lambda:path/2015-03-31/functions/",
+        ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
         {
          "Fn::GetAtt": [
           "getStorageBreakdownFunctionD4BB6828",
@@ -2462,6 +2176,14 @@
       ]
      }
     },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
     "ResourceId": {
      "Ref": "KeepCapsuleApibreakdown7AE0CF49"
     },
@@ -2516,138 +2238,1166 @@
     "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/breakdown/OPTIONS/Resource"
    }
   },
+  "KeepCapsuleApicreatecheckoutsessionDA9B77CE": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "KeepCapsuleApi4C33AC9E",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "create-checkout-session",
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/create-checkout-session/Resource"
+   }
+  },
+  "KeepCapsuleApicreatecheckoutsessionPOSTApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25POSTcreatecheckoutsession1BE5046D": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "createCheckoutSessionFunction32EC871E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:eu-west-1:248189922191:",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/",
+       {
+        "Ref": "KeepCapsuleApiDeploymentStageprodB4D89F5E"
+       },
+       "/POST/create-checkout-session"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/create-checkout-session/POST/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..create-checkout-session"
+   }
+  },
+  "KeepCapsuleApicreatecheckoutsessionPOSTApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25POSTcreatecheckoutsession362C3937": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "createCheckoutSessionFunction32EC871E",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:eu-west-1:248189922191:",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/test-invoke-stage/POST/create-checkout-session"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/create-checkout-session/POST/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..create-checkout-session"
+   }
+  },
+  "KeepCapsuleApicreatecheckoutsessionPOST57668F23": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "ResponseTemplates": {
+        "application/json": ""
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{\n              \"body\": \"$util.escapeJavaScript($input.body).replaceAll(\"\\'\",\"'\")\"\n            }"
+     },
+     "Type": "AWS",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "createCheckoutSessionFunction32EC871E",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "KeepCapsuleApicreatecheckoutsessionDA9B77CE"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/create-checkout-session/POST/Resource"
+   }
+  },
+  "KeepCapsuleApicreatecheckoutsessionOPTIONS3728A960": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "KeepCapsuleApicreatecheckoutsessionDA9B77CE"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/create-checkout-session/OPTIONS/Resource"
+   }
+  },
+  "KeepCapsuleApirequestpasswordreset6202A6BB": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "KeepCapsuleApi4C33AC9E",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "request-password-reset",
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/request-password-reset/Resource"
+   }
+  },
+  "KeepCapsuleApirequestpasswordresetPOSTApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25POSTrequestpasswordreset5D2FF2D9": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "requestPasswordResetFunctionD46EF1B5",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:eu-west-1:248189922191:",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/",
+       {
+        "Ref": "KeepCapsuleApiDeploymentStageprodB4D89F5E"
+       },
+       "/POST/request-password-reset"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/request-password-reset/POST/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..request-password-reset"
+   }
+  },
+  "KeepCapsuleApirequestpasswordresetPOSTApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25POSTrequestpasswordresetFC9548D7": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "requestPasswordResetFunctionD46EF1B5",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:eu-west-1:248189922191:",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/test-invoke-stage/POST/request-password-reset"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/request-password-reset/POST/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..request-password-reset"
+   }
+  },
+  "KeepCapsuleApirequestpasswordresetPOST5D1F4F30": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "ResponseTemplates": {
+        "application/json": ""
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{\n              \"body\": \"$util.escapeJavaScript($input.body).replaceAll(\"\\'\",\"'\")\"\n            }"
+     },
+     "Type": "AWS",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "requestPasswordResetFunctionD46EF1B5",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "KeepCapsuleApirequestpasswordreset6202A6BB"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/request-password-reset/POST/Resource"
+   }
+  },
+  "KeepCapsuleApirequestpasswordresetOPTIONSE902C3E2": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "KeepCapsuleApirequestpasswordreset6202A6BB"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/request-password-reset/OPTIONS/Resource"
+   }
+  },
+  "KeepCapsuleApiresetpasswordC842ED66": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "KeepCapsuleApi4C33AC9E",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "reset-password",
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/reset-password/Resource"
+   }
+  },
+  "KeepCapsuleApiresetpasswordPOSTApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25POSTresetpassword9B6CA9B8": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "resetPasswordFunctionEBC52182",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:eu-west-1:248189922191:",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/",
+       {
+        "Ref": "KeepCapsuleApiDeploymentStageprodB4D89F5E"
+       },
+       "/POST/reset-password"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/reset-password/POST/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..reset-password"
+   }
+  },
+  "KeepCapsuleApiresetpasswordPOSTApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25POSTresetpasswordF7079CA4": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "resetPasswordFunctionEBC52182",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:eu-west-1:248189922191:",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/test-invoke-stage/POST/reset-password"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/reset-password/POST/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..reset-password"
+   }
+  },
+  "KeepCapsuleApiresetpasswordPOST3894B62E": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "ResponseTemplates": {
+        "application/json": ""
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "RequestTemplates": {
+      "application/json": "{\n              \"body\": \"$util.escapeJavaScript($input.body).replaceAll(\"\\'\",\"'\")\"\n            }"
+     },
+     "Type": "AWS",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "resetPasswordFunctionEBC52182",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "KeepCapsuleApiresetpasswordC842ED66"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/reset-password/POST/Resource"
+   }
+  },
+  "KeepCapsuleApiresetpasswordOPTIONSF9624B39": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "KeepCapsuleApiresetpasswordC842ED66"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/reset-password/OPTIONS/Resource"
+   }
+  },
+  "KeepCapsuleApiloginv2BA40A070": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "KeepCapsuleApi4C33AC9E",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "login-v2",
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/login-v2/Resource"
+   }
+  },
+  "KeepCapsuleApiloginv2POSTApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25POSTloginv257CDF781": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "loginUserFunction1FA81047",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:eu-west-1:248189922191:",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/",
+       {
+        "Ref": "KeepCapsuleApiDeploymentStageprodB4D89F5E"
+       },
+       "/POST/login-v2"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/login-v2/POST/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..login-v2"
+   }
+  },
+  "KeepCapsuleApiloginv2POSTApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25POSTloginv2CE765084": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "loginUserFunction1FA81047",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:eu-west-1:248189922191:",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/test-invoke-stage/POST/login-v2"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/login-v2/POST/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.POST..login-v2"
+   }
+  },
+  "KeepCapsuleApiloginv2POSTC909BA1A": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "loginUserFunction1FA81047",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "KeepCapsuleApiloginv2BA40A070"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/login-v2/POST/Resource"
+   }
+  },
+  "KeepCapsuleApiloginv2OPTIONS39DAB677": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "KeepCapsuleApiloginv2BA40A070"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/login-v2/OPTIONS/Resource"
+   }
+  },
+  "KeepCapsuleApifiles3B28B6C9": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "KeepCapsuleApi4C33AC9E",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "files",
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/Resource"
+   }
+  },
+  "KeepCapsuleApifilesGETApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25GETfiles1E27A11E": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getFilesFunction3E9EBCF2",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:eu-west-1:248189922191:",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/",
+       {
+        "Ref": "KeepCapsuleApiDeploymentStageprodB4D89F5E"
+       },
+       "/GET/files"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/GET/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.GET..files"
+   }
+  },
+  "KeepCapsuleApifilesGETApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25GETfilesE1BE799D": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getFilesFunction3E9EBCF2",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:eu-west-1:248189922191:",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/test-invoke-stage/GET/files"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/GET/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.GET..files"
+   }
+  },
+  "KeepCapsuleApifilesGET851E2711": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "getFilesFunction3E9EBCF2",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "KeepCapsuleApifiles3B28B6C9"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/GET/Resource"
+   }
+  },
+  "KeepCapsuleApifilesDELETEApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25DELETEfilesAD502608": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "deleteFileFunction648E9D10",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:eu-west-1:248189922191:",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/",
+       {
+        "Ref": "KeepCapsuleApiDeploymentStageprodB4D89F5E"
+       },
+       "/DELETE/files"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/DELETE/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.DELETE..files"
+   }
+  },
+  "KeepCapsuleApifilesDELETEApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25DELETEfiles9CEBD6F0": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "deleteFileFunction648E9D10",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:eu-west-1:248189922191:",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/test-invoke-stage/DELETE/files"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/DELETE/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.DELETE..files"
+   }
+  },
+  "KeepCapsuleApifilesDELETE472E6597": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "DELETE",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "deleteFileFunction648E9D10",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "KeepCapsuleApifiles3B28B6C9"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/DELETE/Resource"
+   }
+  },
+  "KeepCapsuleApifilesOPTIONS5F75576A": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "OPTIONS",
+    "Integration": {
+     "IntegrationResponses": [
+      {
+       "ResponseParameters": {
+        "method.response.header.Access-Control-Allow-Headers": "'*'",
+        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,DELETE'",
+        "method.response.header.Access-Control-Allow-Origin": "'*'"
+       },
+       "StatusCode": "200"
+      }
+     ],
+     "PassthroughBehavior": "NEVER",
+     "RequestTemplates": {
+      "application/json": "{\"statusCode\": 200}"
+     },
+     "Type": "MOCK"
+    },
+    "MethodResponses": [
+     {
+      "ResponseParameters": {
+       "method.response.header.Access-Control-Allow-Headers": true,
+       "method.response.header.Access-Control-Allow-Methods": true,
+       "method.response.header.Access-Control-Allow-Origin": true
+      },
+      "StatusCode": "200"
+     }
+    ],
+    "ResourceId": {
+     "Ref": "KeepCapsuleApifiles3B28B6C9"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/files/OPTIONS/Resource"
+   }
+  },
+  "KeepCapsuleApistripesession2F269016": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "KeepCapsuleApi4C33AC9E",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "stripe-session",
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/stripe-session/Resource"
+   }
+  },
+  "KeepCapsuleApistripesessionsessionId3FA7697F": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Ref": "KeepCapsuleApistripesession2F269016"
+    },
+    "PathPart": "{sessionId}",
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/stripe-session/{sessionId}/Resource"
+   }
+  },
+  "KeepCapsuleApistripesessionsessionIdGETApiPermissionKeepCapsuleStackKeepCapsuleApi1F566E25GETstripesessionsessionId1EED0DCB": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getStripeSessionFunction67B5EEF1",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:eu-west-1:248189922191:",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/",
+       {
+        "Ref": "KeepCapsuleApiDeploymentStageprodB4D89F5E"
+       },
+       "/GET/stripe-session/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/stripe-session/{sessionId}/GET/ApiPermission.KeepCapsuleStackKeepCapsuleApi1F566E25.GET..stripe-session.{sessionId}"
+   }
+  },
+  "KeepCapsuleApistripesessionsessionIdGETApiPermissionTestKeepCapsuleStackKeepCapsuleApi1F566E25GETstripesessionsessionIdAD1EDC03": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getStripeSessionFunction67B5EEF1",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:eu-west-1:248189922191:",
+       {
+        "Ref": "KeepCapsuleApi4C33AC9E"
+       },
+       "/test-invoke-stage/GET/stripe-session/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/stripe-session/{sessionId}/GET/ApiPermission.Test.KeepCapsuleStackKeepCapsuleApi1F566E25.GET..stripe-session.{sessionId}"
+   }
+  },
+  "KeepCapsuleApistripesessionsessionIdGET9144A038": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:eu-west-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "getStripeSessionFunction67B5EEF1",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "KeepCapsuleApistripesessionsessionId3FA7697F"
+    },
+    "RestApiId": {
+     "Ref": "KeepCapsuleApi4C33AC9E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "KeepCapsuleStack/KeepCapsuleApi/Default/stripe-session/{sessionId}/GET/Resource"
+   }
+  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/22PTW8CIRCGf4t3pH5c2qPa9NbUrL2bWZjacRfY7IBmQ/jvDWCqaXp6n3d4mY+VXL4s5GIGV54r3c17amU8eFCdgCsfI69l3AbVoRe7L3ujKnvXk5ru5ZuvZguMSejJgnG6lfET2h5ztkASBEbGxtVa0Xu7Skn0YFoNMr4Fqzw5m98eeY+jIWZyNgleH4EZPctNFgEDncDjFSYZG2S/GahMuuNGKResF6849G4yaMuFD+7g4VTWq9AguzAqzJf9mlvPyu/ov53OpUopiV1g78y/6RyDYSB7+pPaj+5CGscyqFyTF8i5x78fwQ/BJ2GdRnnmp8tqIZfPcjk7M9F8DNaTQdlU/QFoJ1xa5gEAAA=="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/22PT2/CMAzFPwv3kPHnsh2Bids0VHZHbuIxQ5NUdUJVRfnuUxO0grTT+z3b8rNXcvm2kIsZ9DxX+jpvqJbx6EFdBfR8iryWcRvUFb3Yfds7FTm4htQwle++mC0wJqEHC8bpWsYvqBscZzMkQWBkrFypZZ3WFUqiAVNrkHEfrPLk7Nh75AN2hpjJ2SR4fQJm9Cw3owho6QweexhkrJD9pqWcNOFGKResF+/YNm4waPOHD+7o4ZzPK1Ahu9ApHD/7M/edhT/Q/zg9lgqlJHaBvTP/Tj+3Dp27kcYub88vjKlkz09Rn8G3wSdhnUZ54ZfbaiGXr3I5uzDRvAvWk0FZFf0FtiKXEtsBAAA="
    },
    "Metadata": {
     "aws:cdk:path": "KeepCapsuleStack/CDKMetadata/Default"
-   },
-   "Condition": "CDKMetadataAvailable"
-  }
- },
- "Mappings": {
-  "LatestNodeRuntimeMap": {
-   "af-south-1": {
-    "value": "nodejs20.x"
-   },
-   "ap-east-1": {
-    "value": "nodejs20.x"
-   },
-   "ap-northeast-1": {
-    "value": "nodejs20.x"
-   },
-   "ap-northeast-2": {
-    "value": "nodejs20.x"
-   },
-   "ap-northeast-3": {
-    "value": "nodejs20.x"
-   },
-   "ap-south-1": {
-    "value": "nodejs20.x"
-   },
-   "ap-south-2": {
-    "value": "nodejs20.x"
-   },
-   "ap-southeast-1": {
-    "value": "nodejs20.x"
-   },
-   "ap-southeast-2": {
-    "value": "nodejs20.x"
-   },
-   "ap-southeast-3": {
-    "value": "nodejs20.x"
-   },
-   "ap-southeast-4": {
-    "value": "nodejs20.x"
-   },
-   "ap-southeast-5": {
-    "value": "nodejs20.x"
-   },
-   "ap-southeast-7": {
-    "value": "nodejs20.x"
-   },
-   "ca-central-1": {
-    "value": "nodejs20.x"
-   },
-   "ca-west-1": {
-    "value": "nodejs20.x"
-   },
-   "cn-north-1": {
-    "value": "nodejs20.x"
-   },
-   "cn-northwest-1": {
-    "value": "nodejs20.x"
-   },
-   "eu-central-1": {
-    "value": "nodejs20.x"
-   },
-   "eu-central-2": {
-    "value": "nodejs20.x"
-   },
-   "eu-isoe-west-1": {
-    "value": "nodejs18.x"
-   },
-   "eu-north-1": {
-    "value": "nodejs20.x"
-   },
-   "eu-south-1": {
-    "value": "nodejs20.x"
-   },
-   "eu-south-2": {
-    "value": "nodejs20.x"
-   },
-   "eu-west-1": {
-    "value": "nodejs20.x"
-   },
-   "eu-west-2": {
-    "value": "nodejs20.x"
-   },
-   "eu-west-3": {
-    "value": "nodejs20.x"
-   },
-   "il-central-1": {
-    "value": "nodejs20.x"
-   },
-   "me-central-1": {
-    "value": "nodejs20.x"
-   },
-   "me-south-1": {
-    "value": "nodejs20.x"
-   },
-   "mx-central-1": {
-    "value": "nodejs20.x"
-   },
-   "sa-east-1": {
-    "value": "nodejs20.x"
-   },
-   "us-east-1": {
-    "value": "nodejs20.x"
-   },
-   "us-east-2": {
-    "value": "nodejs20.x"
-   },
-   "us-gov-east-1": {
-    "value": "nodejs20.x"
-   },
-   "us-gov-west-1": {
-    "value": "nodejs20.x"
-   },
-   "us-iso-east-1": {
-    "value": "nodejs18.x"
-   },
-   "us-iso-west-1": {
-    "value": "nodejs18.x"
-   },
-   "us-isob-east-1": {
-    "value": "nodejs18.x"
-   },
-   "us-west-1": {
-    "value": "nodejs20.x"
-   },
-   "us-west-2": {
-    "value": "nodejs20.x"
    }
   }
  },
@@ -2661,11 +3411,7 @@
       {
        "Ref": "KeepCapsuleApi4C33AC9E"
       },
-      ".execute-api.",
-      {
-       "Ref": "AWS::Region"
-      },
-      ".",
+      ".execute-api.eu-west-1.",
       {
        "Ref": "AWS::URLSuffix"
       },
@@ -2677,272 +3423,6 @@
      ]
     ]
    }
-  }
- },
- "Conditions": {
-  "CDKMetadataAvailable": {
-   "Fn::Or": [
-    {
-     "Fn::Or": [
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "af-south-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-east-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-northeast-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-northeast-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-northeast-3"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-south-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-south-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-southeast-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-southeast-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-southeast-3"
-       ]
-      }
-     ]
-    },
-    {
-     "Fn::Or": [
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ap-southeast-4"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ca-central-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "ca-west-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "cn-north-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "cn-northwest-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-central-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-central-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-north-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-south-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-south-2"
-       ]
-      }
-     ]
-    },
-    {
-     "Fn::Or": [
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-west-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-west-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "eu-west-3"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "il-central-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "me-central-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "me-south-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "sa-east-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "us-east-1"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "us-east-2"
-       ]
-      },
-      {
-       "Fn::Equals": [
-        {
-         "Ref": "AWS::Region"
-        },
-        "us-west-1"
-       ]
-      }
-     ]
-    },
-    {
-     "Fn::Equals": [
-      {
-       "Ref": "AWS::Region"
-      },
-      "us-west-2"
-     ]
-    }
-   ]
   }
  },
  "Parameters": {

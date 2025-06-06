@@ -1,90 +1,101 @@
-import React from "react";
+// src/components/auth/AuthModal.js
+import React, { useState } from "react";
+import { loginUser } from "../../api/loginUser";
 import "./auth.css";
 
 const AuthModal = ({
-  showModal,
-  setShowModal,
+  onClose,
+  onLoginSuccess,
   isLogin,
   setIsLogin,
   email,
   setEmail,
   password,
   setPassword,
-  handleAuth,
+  setLoggedInUser,
 }) => {
-  if (!showModal) return null;
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (isLogin) {
-      handleAuth(e);
-    } else {
-      const encodedEmail = encodeURIComponent(email);
-      window.location.href = `https://buy.stripe.com/fZeeWFd3ubxp0iQ3cc?prefilled_email=${encodedEmail}`;
-    }
+  const handleSwitchMode = () => {
+    setIsLogin(!isLogin);
+    setError("");
   };
 
-  const goToForgotPassword = () => {
-    setShowModal(false);
-    window.location.href = "/forgot-password";
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      if (!isLogin) {
+        // SIGNUP FLOW
+        const priceId = "price_1RWdnjFvZgkjkekwfGfpuvaw";
+
+        const response = await fetch(
+          "https://87kwlf9dhj.execute-api.eu-west-1.amazonaws.com/prod/create-checkout-session",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, priceId }),
+          }
+        );
+
+        const raw = await response.json();
+        const data = typeof raw.body === "string" ? JSON.parse(raw.body) : raw;
+
+        if (!data.url) throw new Error("Stripe redirect failed");
+
+        // Redirect to Stripe
+        window.location.href = data.url;
+      } else {
+        // LOGIN FLOW
+        const data = await loginUser(email, password);
+
+        localStorage.setItem(
+          "keepcapsule_user",
+          JSON.stringify({ email, customerId: data.customerId })
+        );
+        setLoggedInUser({ email });
+        onLoginSuccess(email);
+        onClose();
+      }
+    } catch (err) {
+      console.error("Auth error:", err);
+      setError(err.message || "Something went wrong");
+    }
   };
 
   return (
     <div className="auth-modal">
       <div className="auth-content">
-        <button className="auth-close" onClick={() => setShowModal(false)}>
-          ✖
+        <button className="auth-close" onClick={onClose}>
+          ×
         </button>
         <h2>{isLogin ? "Login" : "Sign Up"}</h2>
+        {error && <p className="auth-error">{error}</p>}
         <form onSubmit={handleSubmit}>
-          <label htmlFor="email">Email</label>
           <input
             type="email"
-            id="email"
-            placeholder="Enter your email"
+            placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-
-          <label htmlFor="password">Password</label>
           <input
             type="password"
-            id="password"
-            placeholder="Enter your password"
+            placeholder="Password (min 6 chars)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required={isLogin}
+            required
           />
-
-          <button type="submit">
+          <button type="submit" className="auth-button">
             {isLogin ? "Login" : "Continue to Payment"}
           </button>
         </form>
-
-        {isLogin && (
-          <p
-            style={{
-              marginTop: "10px",
-              cursor: "pointer",
-              color: "#2d89ef",
-              fontWeight: "500",
-            }}
-            onClick={goToForgotPassword}
-          >
-            Forgot password?
-          </p>
-        )}
-
-        <div className="auth-controls">
-          <p
-            onClick={() => setIsLogin((prev) => !prev)}
-            style={{ cursor: "pointer", marginTop: "10px" }}
-          >
-            {isLogin ? "No account? Sign up" : "Already have an account? Login"}
-          </p>
-        </div>
+        <p onClick={handleSwitchMode} className="auth-toggle-link">
+          {isLogin ? "No account? Sign up" : "Already have an account? Login"}
+        </p>
       </div>
     </div>
   );

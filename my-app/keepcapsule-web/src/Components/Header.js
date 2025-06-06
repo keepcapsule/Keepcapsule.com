@@ -3,12 +3,12 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/KeepCapsuleLogo.png";
 
-const Header = ({ onLoginClick, user, onLogout }) => {
+const Header = ({ onLoginClick, onSignupClick, user, onLogout }) => {
   const navigate = useNavigate();
 
   return (
     <header>
-      <nav>
+      <nav className="header-nav">
         <div className="nav-left">
           <Link to="/">
             <img src={Logo} alt="KeepCapsule Logo" className="logo-image" />
@@ -26,7 +26,7 @@ const Header = ({ onLoginClick, user, onLogout }) => {
             <li>
               <Link to="/">Join Us</Link>
             </li>
-            {user && (
+            {user?.email && (
               <li>
                 <Link to="/dashboard">Dashboard</Link>
               </li>
@@ -35,17 +35,32 @@ const Header = ({ onLoginClick, user, onLogout }) => {
         </div>
 
         <div className="nav-right">
-          {user ? (
+          {user?.email ? (
             <>
-              <span style={{ marginRight: "10px" }}>{user.email}</span>
+              <span className="user-email" style={{ marginRight: "10px" }}>
+                {user.email}
+              </span>
               <button className="login-btn" onClick={onLogout}>
                 Logout
               </button>
             </>
           ) : (
-            <button className="login-btn" onClick={onLoginClick}>
-              Login
-            </button>
+            <>
+              <button className="login-btn" onClick={() => onLoginClick()}>
+                Login
+              </button>
+              <button
+                className="login-btn"
+                onClick={() => onSignupClick()}
+                style={{
+                  marginLeft: "10px",
+                  backgroundColor: "#2d89ef",
+                  color: "white",
+                }}
+              >
+                Join
+              </button>
+            </>
           )}
         </div>
       </nav>

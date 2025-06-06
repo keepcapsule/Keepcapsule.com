@@ -1,6 +1,5 @@
 // src/components/Hero.js
 import React from "react";
-import AuthContainer from "./auth/AuthContainer";
 
 const Hero = () => {
   return (
@@ -13,7 +12,6 @@ const Hero = () => {
             Join the Waitlist
           </a>
           {/* <a href="https://buy.stripe.com/fZeeWFd3ubxp0iQ3cc" className="cta-button subscribe">Subscribe</a> */}
-          <AuthContainer />
         </div>
       </div>
     </section>

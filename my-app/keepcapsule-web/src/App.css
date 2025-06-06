@@ -300,3 +300,15 @@ footer {
     height: 30px;
   }
 }
+
+.auth-close-button {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #555;
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  z-index: 1000;
+}
